@@ -134,7 +134,8 @@ eval "${COMMAND}"
 
 
 
-COMMAND=$( build_params )
+COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} "
+COMMAND+=$( build_params )
 
 echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
 eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
