@@ -9,4 +9,4 @@ git clone \
    --single-branch \
    --branch ${QEMU_BRANCH} \
    ${QEMU_REMOTE} \
-   "${QEMU_DIR}/source/"
+   ${QEMU_SOURCE_DIR}

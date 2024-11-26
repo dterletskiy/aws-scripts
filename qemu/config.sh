@@ -18,5 +18,5 @@ CONFIG_OPTIONS+=" --disable-sdl"
 CONFIG_OPTIONS+=" --disable-opengl"
 CONFIG_OPTIONS+=" --extra-cflags=\"-Wno-error=unused-result\""
 
-cd ${QEMU_DIR}/source/
+cd ${QEMU_SOURCE_DIR}
 ./configure "${CONFIG_OPTIONS}"
