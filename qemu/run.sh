@@ -98,8 +98,9 @@ function build_params( )
    COMMAND+=" ${Q_APPEND}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_KERNEL}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_INITRD}"
-   COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
+   COMMAND+=" ${Q_SERIAL}"
+   COMMAND+=" ${Q_GRAPHIC}"
 
    echo "${COMMAND}"
 }
