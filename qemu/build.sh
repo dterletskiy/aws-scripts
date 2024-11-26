@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-source ./common.sh
+readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source ${SCRIPT_DIR}/common.sh
 
-cd ${QEMU_DIR}/source/ && make V=1 -j48
+cd ${QEMU_DIR}/source/
+make V=1 -j48

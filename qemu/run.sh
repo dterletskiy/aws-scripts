@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-source ./common.sh
+readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source ${SCRIPT_DIR}/common.sh
 
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/"
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/x86_64-linux-gnu/"
