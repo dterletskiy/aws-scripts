@@ -10,7 +10,7 @@ eval ${COMMAND}
 
 sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} \
 ${QEMU_DIR}/deploy/usr/local/bin/qemu-system-aarch64 \
-   -machine type=virt,acpi=off,secure=off,mte=on,accel=kvm,virtualization=on,iommu=smmuv3,gic-version=max \
+   -machine type=virt,acpi=off,secure=off,accel=kvm,virtualization=on,iommu=smmuv3,gic-version=max \
    -enable-kvm \
    -cpu max,sme=off \
    -smp 4 \
