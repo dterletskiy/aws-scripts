@@ -12,7 +12,7 @@ sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} \
 ${QEMU_DIR}/deploy/usr/local/bin/qemu-system-aarch64 \
    -machine type=virt,acpi=off,secure=off,accel=kvm,virtualization=on,iommu=smmuv3,gic-version=max \
    -enable-kvm \
-   -cpu max,sme=off \
+   -cpu max \
    -smp 4 \
    -m 8G \
    -d guest_errors \
