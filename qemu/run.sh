@@ -49,6 +49,7 @@ function build_params( )
    Q_MACHINE+=",iommu=smmuv3"
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
+   # Q_MACHINE+=" -enable-kvm
 
    Q_CPU=" -cpu max"
    # Q_CPU+=",sme=off"
@@ -68,9 +69,11 @@ function build_params( )
    Q_LOGGING+=",out_asm"
    Q_LOGGING+=",in_asm"
    Q_LOGGING+=",int"
-   # Q_LOGGING+=" -icount shift=auto,rr=record,rrfile=${QEMU_RECORD_DUMP}"
-   # Q_LOGGING+=" -pidfile ${QEMU_PID_DUMP}"
-   # Q_LOGGING+=" -monitor tcp:127.0.0.1:4444,server,nowait"
+   Q_LOGGING+=" -pidfile ${QEMU_PID_DUMP}"
+
+   Q_RECORD=" -icount shift=auto,rr=record,rrfile=${QEMU_RECORD_DUMP}"
+
+   Q_MONITOR+=" -monitor tcp:127.0.0.1:4444,server,nowait"
 
    Q_KERNEL=" -kernel ${XEN}"
    Q_APPEND=" -append \"${XEN_CMD_LINE}\""
@@ -95,13 +98,59 @@ function build_params( )
    COMMAND+=" ${Q_CPU}"
    COMMAND+=" ${Q_MEMORY}"
    COMMAND+=" ${Q_COMMON}"
-   COMMAND+=" ${Q_LOGGING}"
-   # COMMAND+=" -enable-kvm"
+   # COMMAND+=" ${Q_LOGGING}"
+   # COMMAND+=" ${Q_RECORD}"
+   # COMMAND+=" ${Q_MONITOR}"
    COMMAND+=" ${Q_KERNEL}"
    COMMAND+=" ${Q_APPEND}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_KERNEL}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_INITRD}"
    COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
+   COMMAND+=" ${Q_SERIAL}"
+   COMMAND+=" ${Q_GRAPHIC}"
+
+   echo "${COMMAND}"
+}
+
+function build_params_experimental( )
+{
+   Q_MACHINE="-machine virt"
+   Q_MACHINE+=",acpi=off"
+   Q_MACHINE+=",secure=off"
+   # Q_MACHINE+=",mte=on"
+   Q_MACHINE+=",accel=kvm"
+   Q_MACHINE+=",virtualization=on"
+   Q_MACHINE+=",iommu=smmuv3"
+   Q_MACHINE+=",gic-version=max"
+   # Q_MACHINE+=",its=off"
+   # Q_MACHINE+=" -enable-kvm
+
+   Q_CPU=" -cpu max"
+   # Q_CPU+=",sme=off"
+   Q_CPU+=" -smp 4"
+
+   Q_MEMORY=" -m 8G"
+
+   Q_COMMON=""
+   Q_COMMON+=" -nodefaults"
+   Q_COMMON+=" -no-reboot"
+
+   Q_KERNEL=" -kernel ${DOM0_KERNEL}"
+   Q_APPEND=" -append \"${DOM0_KERNEL_CMD_LINE}\""
+   Q_INITRD=" -initrd ${DOM0_INITRD}"
+
+   Q_SERIAL=" -serial mon:stdio"
+
+   Q_GRAPHIC=" -nographic"
+
+   COMMAND="${QEMU_ARM64}"
+   COMMAND+=" ${Q_MACHINE}"
+   COMMAND+=" ${Q_CPU}"
+   COMMAND+=" ${Q_MEMORY}"
+   COMMAND+=" ${Q_COMMON}"
+   COMMAND+=" ${Q_KERNEL}"
+   COMMAND+=" ${Q_KERNEL}"
+   COMMAND+=" ${Q_INITRD}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
 
@@ -139,7 +188,7 @@ eval "${COMMAND}"
 
 
 COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} "
-COMMAND+=$( build_params )
+COMMAND+=$( build_params_experimental )
 
 echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
 eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
