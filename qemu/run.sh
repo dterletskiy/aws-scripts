@@ -38,7 +38,7 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 
 
-function build_params( )
+function build_params_with_xen( )
 {
    Q_MACHINE="-machine virt"
    Q_MACHINE+=",acpi=off"
@@ -112,7 +112,7 @@ function build_params( )
    echo "${COMMAND}"
 }
 
-function build_params_experimental( )
+function build_params_no_xen( )
 {
    Q_MACHINE="-machine virt"
    Q_MACHINE+=",acpi=off"
@@ -188,7 +188,7 @@ eval "${COMMAND}"
 
 
 COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} "
-COMMAND+=$( build_params_experimental )
+COMMAND+=$( build_params_with_xen )
 
 echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
 eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
