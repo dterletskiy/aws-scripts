@@ -371,6 +371,9 @@ function main( )
    echo ${COMMAND} > ${COMMAND_FILE}
    eval "${COMMAND}"
 
+   COMMAND="sudo chmod 644 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data"
+   eval "${COMMAND}"
+
    COMMAND="${PERF_TOOL} report -i ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data > ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
    eval "${COMMAND}"
 }
