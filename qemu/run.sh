@@ -253,11 +253,11 @@ function decompile_dt( )
 
 
 
-# LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/"
-# LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/x86_64-linux-gnu/"
-# COMMAND="export LD_LIBRARY_PATH"
-# echo "${COMMAND}"
-# eval "${COMMAND}"
+LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/"
+LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/x86_64-linux-gnu/"
+COMMAND="export LD_LIBRARY_PATH"
+echo "${COMMAND}"
+eval "${COMMAND}"
 
 
 
@@ -364,6 +364,12 @@ function main( )
       ;;
    esac
 
+   echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
+   eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
+
+   decompile_dt ${QEMU_DTB_DUMP} ${QEMU_DTS_DUMP}
+   compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
+
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
       COMMAND="sudo ${PERF_TOOL} record -o ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data ${COMMAND}"
    fi
@@ -371,11 +377,13 @@ function main( )
    echo ${COMMAND} > ${COMMAND_FILE}
    eval "${COMMAND}"
 
-   COMMAND="sudo chmod 644 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data"
-   eval "${COMMAND}"
+   if [[ ! "${CMD_PERF}" -eq 0 ]]; then
+      COMMAND="sudo chmod 644 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data"
+      eval "${COMMAND}"
 
-   COMMAND="${PERF_TOOL} report -i ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data > ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
-   eval "${COMMAND}"
+      COMMAND="${PERF_TOOL} report -i ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data > ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
+      eval "${COMMAND}"
+   fi
 }
 
 
