@@ -1,4 +1,4 @@
-KEY=
+KEY=""
 REMOTE_USER=ubuntu
 REMOTE_IP=
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
@@ -16,3 +16,11 @@ FILE=./qemu-image-minimal-generic-armv8-xt.rootfs-20241116080357.ext4
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/rootfs.domd.ext4
 FILE=./xen-generic-armv8-xt
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
+
+
+
+
+
+
+
+scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/qemu_kvm_perf.data .

@@ -261,29 +261,6 @@ eval "${COMMAND}"
 
 
 
-# COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} "
-# COMMAND+=$( build_params_with_xen )
-
-# echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
-# eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
-
-# decompile_dt ${QEMU_DTB_DUMP} ${QEMU_DTS_DUMP}
-# compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
-
-# echo "${COMMAND}"
-# echo ${COMMAND} > ${COMMAND_FILE}
-# eval "${COMMAND}"
-
-
-
-
-
-
-
-
-
-
-
 function validate_parameters( )
 {
    if [ -z ${CMD_MODE+x} ]; then
