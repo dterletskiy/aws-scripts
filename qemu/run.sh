@@ -365,11 +365,13 @@ function main( )
    esac
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
-      COMMAND="sudo ${PERF_TOOL} record ${COMMAND}"
+      COMMAND="sudo ${PERF_TOOL} record -o ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data ${COMMAND}"
    fi
 
    echo ${COMMAND} > ${COMMAND_FILE}
    eval "${COMMAND}"
+
+   COMMAND="${PERF_TOOL} report -i ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data > ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
 }
 
 
