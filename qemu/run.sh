@@ -365,7 +365,7 @@ function main( )
    esac
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
-      COMMAND="sudo perf record ${COMMAND}"
+      COMMAND="sudo ${PERF_TOOL} record ${COMMAND}"
    fi
 
    echo ${COMMAND} > ${COMMAND_FILE}
