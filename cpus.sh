@@ -41,7 +41,7 @@ function validate_parameters( )
       echo "'--action' is defined but empty"
       exit 1
    else
-      ALLOWED_ACTIONS=( "enable" "disable" )
+      ALLOWED_ACTIONS=( "enable" "disable" "on" "off" )
       if [[ ! "${ALLOWED_ACTIONS[@]}" =~ "${ALLOWED_ACTIONS}" ]]; then
          echo "'--action' is defined but invalid"
          exit 1
@@ -117,10 +117,10 @@ function main( )
    local ENABLE=0
 
    case ${CMD_ACTION} in
-      enable)
+      enable|on)
          ENABLE=1
       ;;
-      disable)
+      disable|off)
          ENABLE=0
       ;;
       *)
