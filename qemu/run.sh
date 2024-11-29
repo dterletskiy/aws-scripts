@@ -356,12 +356,15 @@ function main( )
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
       COMMAND="sudo chmod 644 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data"
+      echo ${COMMAND}
       eval "${COMMAND}"
 
       COMMAND="${PERF_TOOL} report --hierarchy -i ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data > ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
+      echo ${COMMAND}
       eval "${COMMAND}"
 
       COMMAND="head -50 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
+      echo ${COMMAND} 
       eval "${COMMAND}"
    fi
 }
