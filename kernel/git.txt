@@ -1,0 +1,18 @@
+git remote add upstream https://github.com/torvalds/linux.git
+git fetch upstream
+git fetch upstream --tags
+git log --oneline --graph --all --decorate
+git merge-base upstream/master kvm-arm64/nv-6.11-sve-WIP
+git merge-base upstream/master  HEAD
+
+
+
+git log --oneline
+git log --pretty=format:"%h %ad %s" --date=short
+
+
+git show --pretty=format:"%h %ad %s" --date=short --no-patch c92e8b9eacebb4060634ebd9395bba1b29aadc68
+# c92e8b9eaceb 2024-05-24 KVM: arm64: AArch32: Fix spurious trapping of conditional instructions
+
+git show --pretty=format:"%H %ad %s" --date=short --no-patch c92e8b9eacebb4060634ebd9395bba1b29aadc68
+# c92e8b9eacebb4060634ebd9395bba1b29aadc68 2024-05-24 KVM: arm64: AArch32: Fix spurious trapping of conditional instructions
