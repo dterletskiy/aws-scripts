@@ -237,8 +237,7 @@ function compile_dt( )
    local OUT_DTB=${2}
 
    local COMMAND="dtc -I dts -O dtb -o ${OUT_DTB} ${IN_DTS}"
-   echo ${COMMAND}
-   eval "${COMMAND}"
+   execute "${COMMAND}"
 }
 
 function decompile_dt( )
@@ -247,8 +246,7 @@ function decompile_dt( )
    local OUT_DTS=${2}
 
    local COMMAND="dtc -I dtb -O dts -o ${OUT_DTS} ${IN_DTB}"
-   echo ${COMMAND}
-   eval "${COMMAND}"
+   execute "${COMMAND}"
 }
 
 
@@ -256,8 +254,7 @@ function decompile_dt( )
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/"
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/x86_64-linux-gnu/"
 COMMAND="export LD_LIBRARY_PATH"
-echo "${COMMAND}"
-eval "${COMMAND}"
+execute "${COMMAND}"
 
 
 
@@ -342,7 +339,6 @@ function main( )
    esac
 
    execute "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
-   exit 1
 
    decompile_dt ${QEMU_DTB_DUMP} ${QEMU_DTS_DUMP}
    compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
@@ -359,16 +355,14 @@ function main( )
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
       COMMAND="sudo chmod 644 ${PERF_RECORD_FILE}"
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute "${COMMAND}"
 
       COMMAND=" \
             ${PERF_TOOL} report \
             -i ${PERF_RECORD_FILE} \
             > ${PERF_REPORT_FILE} \
          "
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute "${COMMAND}"
 
       COMMAND=" \
             ${PERF_TOOL} report \
@@ -376,8 +370,7 @@ function main( )
             -i ${PERF_RECORD_FILE} \
             > ${PERF_REPORT_FILE}.stdio \
          "
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute ${COMMAND}
 
       COMMAND=" \
             ${PERF_TOOL} report \
@@ -385,8 +378,7 @@ function main( )
             -i ${PERF_RECORD_FILE} \
             > ${PERF_REPORT_FILE}.hierarchy \
          "
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute ${COMMAND}
 
       COMMAND=" \
             ${PERF_TOOL} report \
@@ -395,16 +387,14 @@ function main( )
             -i ${PERF_RECORD_FILE} \
             > ${PERF_REPORT_FILE}.hierarchy.stdio \
          "
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute ${COMMAND}
 
       COMMAND=" \
             ${PERF_TOOL} annotate \
             -i ${PERF_RECORD_FILE} \
             > ${PERF_ANNOTATE_FILE} \
          "
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute ${COMMAND}
 
       COMMAND=" \
             ${PERF_TOOL} annotate \
@@ -412,12 +402,10 @@ function main( )
             -i ${PERF_RECORD_FILE} \
             > ${PERF_ANNOTATE_FILE}.stdio \
          "
-      echo ${COMMAND}
-      eval "${COMMAND}"
+      execute ${COMMAND}
 
       COMMAND="head -50 ${PERF_REPORT_FILE}"
-      echo ${COMMAND} 
-      eval "${COMMAND}"
+      execute ${COMMAND} 
    fi
 }
 
