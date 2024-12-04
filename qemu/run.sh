@@ -343,6 +343,7 @@ function main( )
 
    echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
    eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
+   exit 1
 
    decompile_dt ${QEMU_DTB_DUMP} ${QEMU_DTS_DUMP}
    compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
@@ -350,6 +351,7 @@ function main( )
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
       PERF_RECORD_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.record"
       PERF_REPORT_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.report"
+      PERF_ANNOTATE_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.annotate"
       COMMAND="sudo ${PERF_TOOL} record -g -o ${PERF_RECORD_FILE} ${COMMAND}"
    fi
 
@@ -363,9 +365,8 @@ function main( )
 
       COMMAND=" \
             ${PERF_TOOL} report \
-            --hierarchy \
             -i ${PERF_RECORD_FILE} \
-            > ${PERF_REPORT_FILE}.hierarchy \
+            > ${PERF_REPORT_FILE} \
          "
       echo ${COMMAND}
       eval "${COMMAND}"
@@ -381,8 +382,36 @@ function main( )
 
       COMMAND=" \
             ${PERF_TOOL} report \
+            --hierarchy \
             -i ${PERF_RECORD_FILE} \
-            > ${PERF_REPORT_FILE} \
+            > ${PERF_REPORT_FILE}.hierarchy \
+         "
+      echo ${COMMAND}
+      eval "${COMMAND}"
+
+      COMMAND=" \
+            ${PERF_TOOL} report \
+            --hierarchy \
+            --stdio \
+            -i ${PERF_RECORD_FILE} \
+            > ${PERF_REPORT_FILE}.hierarchy.stdio \
+         "
+      echo ${COMMAND}
+      eval "${COMMAND}"
+
+      COMMAND=" \
+            ${PERF_TOOL} annotate \
+            -i ${PERF_RECORD_FILE} \
+            > ${PERF_ANNOTATE_FILE} \
+         "
+      echo ${COMMAND}
+      eval "${COMMAND}"
+
+      COMMAND=" \
+            ${PERF_TOOL} annotate \
+            --stdio
+            -i ${PERF_RECORD_FILE} \
+            > ${PERF_ANNOTATE_FILE}.stdio \
          "
       echo ${COMMAND}
       eval "${COMMAND}"
