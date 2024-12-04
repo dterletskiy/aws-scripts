@@ -372,6 +372,15 @@ function main( )
 
       COMMAND=" \
             ${PERF_TOOL} report \
+            --stdio \
+            -i ${PERF_RECORD_FILE} \
+            > ${PERF_REPORT_FILE}.stdio \
+         "
+      echo ${COMMAND}
+      eval "${COMMAND}"
+
+      COMMAND=" \
+            ${PERF_TOOL} report \
             -i ${PERF_RECORD_FILE} \
             > ${PERF_REPORT_FILE} \
          "
