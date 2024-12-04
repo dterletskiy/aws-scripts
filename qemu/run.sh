@@ -348,22 +348,37 @@ function main( )
    compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
-      COMMAND="sudo ${PERF_TOOL} record -g -o ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data ${COMMAND}"
+      PERF_RECORD_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.record"
+      PERF_REPORT_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.report"
+      COMMAND="sudo ${PERF_TOOL} record -g -o ${PERF_RECORD_FILE} ${COMMAND}"
    fi
 
    echo ${COMMAND} > ${COMMAND_FILE}
    eval "${COMMAND}"
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
-      COMMAND="sudo chmod 644 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data"
+      COMMAND="sudo chmod 644 ${PERF_RECORD_FILE}"
       echo ${COMMAND}
       eval "${COMMAND}"
 
-      COMMAND="${PERF_TOOL} report --hierarchy -i ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data > ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
+      COMMAND=" \
+            ${PERF_TOOL} report \
+            --hierarchy \
+            -i ${PERF_RECORD_FILE} \
+            > ${PERF_REPORT_FILE}.hierarchy \
+         "
       echo ${COMMAND}
       eval "${COMMAND}"
 
-      COMMAND="head -50 ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.log"
+      COMMAND=" \
+            ${PERF_TOOL} report \
+            -i ${PERF_RECORD_FILE} \
+            > ${PERF_REPORT_FILE} \
+         "
+      echo ${COMMAND}
+      eval "${COMMAND}"
+
+      COMMAND="head -50 ${PERF_REPORT_FILE}"
       echo ${COMMAND} 
       eval "${COMMAND}"
    fi
