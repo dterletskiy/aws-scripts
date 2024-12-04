@@ -347,7 +347,7 @@ function main( )
       PERF_RECORD_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.record"
       PERF_REPORT_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.report"
       PERF_ANNOTATE_FILE="${QEMU_DUMP_DIR}/${CMD_MODE}_perf.annotate"
-      COMMAND="sudo ${PERF_TOOL} record -o ${PERF_RECORD_FILE} ${COMMAND}"
+      COMMAND="sudo ${PERF_TOOL} record -g -o ${PERF_RECORD_FILE} ${COMMAND}"
    fi
 
    echo ${COMMAND} > ${COMMAND_FILE}
