@@ -341,8 +341,7 @@ function main( )
       ;;
    esac
 
-   echo "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
-   eval "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
+   execute "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
    exit 1
 
    decompile_dt ${QEMU_DTB_DUMP} ${QEMU_DTS_DUMP}
