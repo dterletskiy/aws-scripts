@@ -348,7 +348,7 @@ function main( )
    compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
-      COMMAND="sudo ${PERF_TOOL} record -a -o ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data ${COMMAND}"
+      COMMAND="sudo ${PERF_TOOL} record -g -o ${QEMU_DUMP_DIR}/${CMD_MODE}_perf.data ${COMMAND}"
    fi
 
    echo ${COMMAND} > ${COMMAND_FILE}

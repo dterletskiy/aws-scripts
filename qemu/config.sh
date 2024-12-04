@@ -5,6 +5,7 @@ source ${SCRIPT_DIR}/common.sh
 
 CONFIG_OPTIONS=""
 CONFIG_OPTIONS+=" --target-list=aarch64-softmmu"
+CONFIG_OPTIONS+=" --enable-debug"
 CONFIG_OPTIONS+=" --enable-user"
 CONFIG_OPTIONS+=" --enable-slirp"
 CONFIG_OPTIONS+=" --enable-tools"
