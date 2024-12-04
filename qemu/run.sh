@@ -394,7 +394,7 @@ function main( )
             -i ${PERF_RECORD_FILE} \
             > ${PERF_ANNOTATE_FILE} \
          "
-      execute ${COMMAND}
+      # execute ${COMMAND}
 
       COMMAND=" \
             ${PERF_TOOL} annotate \
@@ -402,7 +402,7 @@ function main( )
             -i ${PERF_RECORD_FILE} \
             > ${PERF_ANNOTATE_FILE}.stdio \
          "
-      execute ${COMMAND}
+      # execute ${COMMAND}
 
       COMMAND="head -50 ${PERF_REPORT_FILE}"
       execute ${COMMAND} 
