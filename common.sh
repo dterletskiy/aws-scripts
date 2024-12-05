@@ -6,6 +6,11 @@
 # https://lists.gnu.org/archive/html/qemu-devel/2024-02/msg02067.html
 # https://lore.kernel.org/all/20240209160039.677865-1-eric.auger@redhat.com/
 # https://patchwork.kernel.org/project/kvm/cover/20231222-kvm-arm64-sme-v2-0-da226cb180bb@kernel.org/
+# 
+# https://www.arm.com/products/silicon-ip-cpu/neoverse?utm_source=google&utm_medium=cpc&utm_content=text_txt_na_neoverse&utm_campaign=mk30_brand-paid_products_2023_awareness_keyword_na&utm_term=neoverse&gad_source=1&gclid=Cj0KCQiAo5u6BhDJARIsAAVoDWsh29Hz1cni80TeoRhLXsxiJbYfS8c2uRxbgY5h_QlsZEv8szoXCMMaAiObEALw_wcB
+# https://www.arm.com/products/silicon-ip-cpu/neoverse/neoverse-v2
+# https://developer.arm.com/documentation/102375/latest/
+
 
 
 

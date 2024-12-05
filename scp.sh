@@ -1,6 +1,6 @@
-KEY=""
+KEY="/home/dmytro_terletskyi/.tda/aws/epam/c8g.metal-24xl-2024.11.19.pem"
 REMOTE_USER=ubuntu
-REMOTE_IP=
+REMOTE_IP=44.233.222.37
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
 REMOTE_DIR="/home/ubuntu/workspace/yocto/"
 REMOTE_PATH=${REMOTE}:${REMOTE_DIR}
@@ -23,4 +23,4 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
 
 
 
-scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/qemu_kvm_perf.data .
+scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/dump/qemu/ .
