@@ -43,4 +43,5 @@ sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
    -p "${XEN_CMD_LINE}" \
    -m 8192 \
    -c 2 \
+   --console hv \
    --name test-vm
