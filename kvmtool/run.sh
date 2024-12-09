@@ -27,5 +27,4 @@ sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
    -p "${XEN_CMD_LINE}" \
    -d ${YOCTO_DIR}/domd.dtb \
    -m 512 \
-   -c 2 \
-   --serial stdio
+   -c 2
