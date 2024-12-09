@@ -42,4 +42,5 @@ sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
    -k ${XEN} \
    -p "${XEN_CMD_LINE}" \
    -m 512 \
-   -c 2
+   -c 2 \
+   --serial stdio
