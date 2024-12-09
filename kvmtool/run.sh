@@ -24,9 +24,8 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 COMMAND=" \
    sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
-      -k ${XEN} \
-      -p \"${XEN_CMD_LINE}\" \
-      -d ${YOCTO_DIR}/qemu.dtb \
+      -k ${DOM0_KERNEL} \
+      -p \"${DOM0_KERNEL_CMD_LINE}\" \
       -m 512 \
       -c 1 \
       --debug \
