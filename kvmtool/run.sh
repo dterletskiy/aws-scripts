@@ -26,7 +26,7 @@ COMMAND=" \
    sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
       -k ${XEN} \
       -p \"${XEN_CMD_LINE}\" \
-      -d ${YOCTO_DIR}/qemumod.dtb \
+      -d ${YOCTO_DIR}/qemu.dtb \
       -m 512 \
       -c 2 \
 "
