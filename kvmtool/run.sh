@@ -29,5 +29,6 @@ COMMAND=" \
       -d ${YOCTO_DIR}/qemu.dtb \
       -m 512 \
       -c 2 \
+      --debug \
 "
 execute ${COMMAND}
