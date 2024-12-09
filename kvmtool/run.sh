@@ -29,6 +29,6 @@ COMMAND+=" -p \"${XEN_CMD_LINE}\""
 COMMAND+=" -m 8G"
 COMMAND+=" -c 2"
 COMMAND+=" --debug"
-# COMMAND+=" --e2h0"
+COMMAND+=" --e2h0"
 COMMAND+=" --nested"
 execute ${COMMAND}
