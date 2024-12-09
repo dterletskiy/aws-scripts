@@ -22,9 +22,12 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 
 
-sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
-   -k ${XEN} \
-   -p "${XEN_CMD_LINE}" \
-   -d ${YOCTO_DIR}/domd.dtb \
-   -m 512 \
-   -c 2
+COMMAND=" \
+   sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
+      -k ${XEN} \
+      -p \"${XEN_CMD_LINE}\" \
+      -d ${YOCTO_DIR}/domd.dtb \
+      -m 512 \
+      -c 2 \
+"
+execute ${COMMAND}
