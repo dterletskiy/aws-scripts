@@ -28,7 +28,7 @@ COMMAND=" \
       -p \"${XEN_CMD_LINE}\" \
       -d ${YOCTO_DIR}/qemu.dtb \
       -m 512 \
-      -c 2 \
+      -c 1 \
       --debug \
 "
 execute ${COMMAND}
