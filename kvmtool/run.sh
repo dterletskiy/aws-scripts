@@ -41,7 +41,5 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 sudo ${KVMTOOL_SOURCE_DIR}/lkvm run \
    -k ${XEN} \
    -p "${XEN_CMD_LINE}" \
-   -m 8192 \
-   -c 2 \
-   --console hv \
-   --name test-vm
+   -m 512 \
+   -c 2
