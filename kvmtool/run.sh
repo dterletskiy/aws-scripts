@@ -27,7 +27,7 @@ COMMAND=" \
       -k ${XEN} \
       -p \"${XEN_CMD_LINE}\" \
       -m 512 \
-      -c 1 \
+      -c 2 \
       --debug \
 "
 execute ${COMMAND}
