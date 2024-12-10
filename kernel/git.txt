@@ -9,6 +9,7 @@ git merge-base upstream/master  HEAD
 
 git log --oneline
 git log --pretty=format:"%h %ad %s" --date=short
+git log --pretty=format:"%H %ad %s" --date=short
 
 
 git show --pretty=format:"%h %ad %s" --date=short --no-patch c92e8b9eacebb4060634ebd9395bba1b29aadc68
