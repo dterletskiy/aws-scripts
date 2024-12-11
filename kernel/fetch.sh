@@ -9,4 +9,4 @@ git clone \
    --single-branch \
    --branch ${KERNEL_BRANCH} \
    ${KERNEL_REMOTE} \
-   "${KERNEL_DIR}/source/"
+   "${KERNEL_SOURCE_DIR}"

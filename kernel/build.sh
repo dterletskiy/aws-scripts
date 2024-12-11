@@ -3,6 +3,6 @@
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
-cd ${KERNEL_DIR}/source/
+# cd ${KERNEL_SOURCE_DIR}
 
-make V=1 -j48
+make O=${KERNEL_BUILD_DIR} -C {KERNEL_SOURCE_DIR} V=1 -j48
