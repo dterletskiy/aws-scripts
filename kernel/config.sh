@@ -3,17 +3,24 @@
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
+mkdir -p ${KERNEL_BUILD_DIR}
 cd ${KERNEL_BUILD_DIR}
-cp -v /boot/config-$(uname -r) .config
+
+echo cp -v /boot/config-$(uname -r) .config
 # make localmodconfig
-make O=${KERNEL_BUILD_DIR} -C {KERNEL_SOURCE_DIR} menuconfig
+echo make O=${KERNEL_BUILD_DIR} -C {KERNEL_SOURCE_DIR} menuconfig
 
-${KERNEL_SOURCE_DIR}/scripts/config --disable SYSTEM_TRUSTED_KEYS
-${KERNEL_SOURCE_DIR}/scripts/config --disable SYSTEM_REVOCATION_KEYS
-${KERNEL_SOURCE_DIR}/scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS ""
-${KERNEL_SOURCE_DIR}/scripts/config --set-str CONFIG_SYSTEM_REVOCATION_KEYS ""
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_REVOCATION_KEYS
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_TRUSTED_KEYS ""
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_REVOCATION_KEYS ""
 
-${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
-${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_REVOCATION_KEYS
-${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_TRUSTED_KEYS ""
-${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_REVOCATION_KEYS ""
+echo ${KERNEL_SOURCE_DIR}/scripts/config --disable SYSTEM_TRUSTED_KEYS
+echo ${KERNEL_SOURCE_DIR}/scripts/config --disable SYSTEM_REVOCATION_KEYS
+echo ${KERNEL_SOURCE_DIR}/scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS ""
+echo ${KERNEL_SOURCE_DIR}/scripts/config --set-str CONFIG_SYSTEM_REVOCATION_KEYS ""
+
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_REVOCATION_KEYS
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_TRUSTED_KEYS ""
+echo ${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_REVOCATION_KEYS ""
