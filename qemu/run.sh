@@ -351,7 +351,7 @@ function main( )
    fi
 
    echo ${COMMAND} > ${COMMAND_FILE}
-   execute "${COMMAND}"
+   execute "${COMMAND} -s -S"
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
       COMMAND="sudo chmod 644 ${PERF_RECORD_FILE}"

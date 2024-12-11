@@ -1,3 +1,4 @@
+git remote add upstream https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
 git remote add upstream https://github.com/torvalds/linux.git
 git fetch upstream
 git fetch upstream --tags
