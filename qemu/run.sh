@@ -283,6 +283,14 @@ function validate_parameters( )
       echo "'--perf' is defined"
       CMD_PERF=1
    fi
+
+   if [ -z ${CMD_DEBUG+x} ]; then
+      echo "'--debug' is not defined"
+      CMD_DEBUG=0
+   else
+      echo "'--debug' is defined"
+      CMD_DEBUG=1
+   fi
 }
 
 function parse_arguments( )
@@ -305,6 +313,10 @@ function parse_arguments( )
          --perf)
             CMD_PERF=
             echo "CMD_PERF: defined"
+         ;;
+         --debug)
+            CMD_DEBUG=
+            echo "CMD_DEBUG: defined"
          ;;
          *)
             echo "undefined option: '${option}'"
@@ -350,8 +362,12 @@ function main( )
       COMMAND="sudo ${PERF_TOOL} record -g -o ${PERF_RECORD_FILE} ${COMMAND}"
    fi
 
+   if [[ ! "${CMD_DEBUG}" -eq 0 ]]; then
+      COMMAND+=" -s -S"
+   fi
+
    echo ${COMMAND} > ${COMMAND_FILE}
-   execute "${COMMAND} -s -S"
+   execute "${COMMAND}"
 
    if [[ ! "${CMD_PERF}" -eq 0 ]]; then
       COMMAND="sudo chmod 644 ${PERF_RECORD_FILE}"
