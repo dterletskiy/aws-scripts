@@ -22,6 +22,6 @@ COMMAND+=" -ex \"layout regs\""
 COMMAND+=" -ex \"set disassemble-next-line on\""
 COMMAND+=" -ex \"show configuration\""
 COMMAND+=" -ex \"file ${XEN}\""
-COMMAND+=" -ex \"set architecture arm64\""
+COMMAND+=" -ex \"set architecture auto\""
 
 execute "${COMMAND}"
