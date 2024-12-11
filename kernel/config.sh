@@ -8,7 +8,7 @@ cd ${KERNEL_BUILD_DIR}
 
 echo cp -v /boot/config-$(uname -r) .config
 # make localmodconfig
-echo make O=${KERNEL_BUILD_DIR} -C {KERNEL_SOURCE_DIR} menuconfig
+echo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} menuconfig
 
 echo ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
 echo ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_REVOCATION_KEYS
