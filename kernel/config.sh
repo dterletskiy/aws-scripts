@@ -6,8 +6,8 @@ source ${SCRIPT_DIR}/common.sh
 mkdir -p ${KERNEL_BUILD_DIR}
 cd ${KERNEL_BUILD_DIR}
 
-cp -v /boot/config-$(uname -r) .config
-# make localmodconfig
+cp -v /boot/config-$(uname -r) ${KERNEL_BUILD_DIR}/.config
+# make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} localmodconfig
 make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} menuconfig
 
 ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
