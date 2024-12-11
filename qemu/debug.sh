@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# x/32i 0x0000000040000000
+# set $HCR_EL2=0
+# info reg HCR_EL2
+# hbreak *0x00000000402005f8
+
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
