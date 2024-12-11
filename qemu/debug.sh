@@ -11,7 +11,7 @@ clear
 
 
 
-XEN=${YOCTO_DIR}/xen-generic-armv8-xt
+XEN=${YOCTO_DIR}/xen-syms
 
 COMMAND="gdb-multiarch"
 COMMAND+=" -q"
