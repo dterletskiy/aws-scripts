@@ -7,7 +7,13 @@ cd ${KERNEL_BUILD_DIR}
 cp -v /boot/config-$(uname -r) .config
 # make localmodconfig
 make O=${KERNEL_BUILD_DIR} -C {KERNEL_SOURCE_DIR} menuconfig
+
 ${KERNEL_SOURCE_DIR}/scripts/config --disable SYSTEM_TRUSTED_KEYS
 ${KERNEL_SOURCE_DIR}/scripts/config --disable SYSTEM_REVOCATION_KEYS
 ${KERNEL_SOURCE_DIR}/scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS ""
 ${KERNEL_SOURCE_DIR}/scripts/config --set-str CONFIG_SYSTEM_REVOCATION_KEYS ""
+
+${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
+${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_REVOCATION_KEYS
+${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_TRUSTED_KEYS ""
+${KERNEL_SOURCE_DIR}/scripts/config --state CONFIG_SYSTEM_REVOCATION_KEYS ""
