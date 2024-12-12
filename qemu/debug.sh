@@ -17,6 +17,7 @@ clear
 
 
 XEN=${YOCTO_DIR}/xen-syms
+XEN_SRC=${YOCTO_DIR}/xen/
 
 COMMAND="gdb-multiarch"
 COMMAND+=" -q"
@@ -29,7 +30,7 @@ COMMAND+=" -ex \"set disassemble-next-line on\""
 # COMMAND+=" -ex \"set architecture auto\""
 # COMMAND+=" -ex \"file ${XEN}\""
 # COMMAND+=" -ex \"set solib-search-path ${LIB_PATH}\""
-# COMMAND+=" -ex \"set directories ${SRC_PATH}\""
+COMMAND+=" -ex \"set directories ${XEN_SRC}\""
 # COMMAND+=" -ex \"add-symbol-file ${SYMBOLS_FILE} ${SYMBOLS_OFFSET}\""
 # COMMAND+=" -ex \"b *${BREAK_ADDR}\""
 # COMMAND+=" -ex \"b ${BREAK_NAME}\""

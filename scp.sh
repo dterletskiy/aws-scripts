@@ -1,6 +1,6 @@
 KEY="/home/dmytro_terletskyi/.tda/aws/epam/c8g.metal-24xl-2024.11.19.pem"
 REMOTE_USER=ubuntu
-REMOTE_IP=35.86.64.247
+REMOTE_IP=35.86.190.206
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
 REMOTE_DIR="/home/ubuntu/workspace/yocto/"
 REMOTE_PATH=${REMOTE}:${REMOTE_DIR}
@@ -19,7 +19,10 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
 
 cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/yocto/build-domd/tmp/work/aarch64-poky-linux/xen/4.19.0+stable/git/xen/
 FILE=./xen-syms
-scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-syms
+
+FILE=../xen.zip
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/
 
 
 
