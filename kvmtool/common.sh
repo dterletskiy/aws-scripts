@@ -8,8 +8,7 @@ source ${SCRIPT_DIR_COMMON}/../common.sh
 # KVMTOOL_BRANCH="exp"
 
 KVMTOOL_REMOTE="https://git.kernel.org/pub/scm/linux/kernel/git/maz/kvmtool.git/"
-KVMTOOL_BRANCH="arm64/nv-6.5"
-# KVMTOOL_BRANCH="arm64/nv-6.13"
+KVMTOOL_BRANCH="arm64/nv-6.13"
 
 KVMTOOL_DIR=${ROOT_DIR}/kvmtool/${KVMTOOL_BRANCH}/
 KVMTOOL_SOURCE_DIR=${KVMTOOL_DIR}/source/
