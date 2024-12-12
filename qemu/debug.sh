@@ -36,6 +36,6 @@ COMMAND+=" -ex \"set disassemble-next-line on\""
 # COMMAND+=" -ex \"b ${BREAK_FILE}:${BREAK_LINE}\""
 # COMMAND+=" -ex \"info breakpoints\""
 # COMMAND+=" -ex \"info files\""
-COMMAND+=" ${XEN}
+COMMAND+=" ${XEN}"
 
 execute "${COMMAND}"

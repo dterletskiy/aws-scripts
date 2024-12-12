@@ -17,6 +17,10 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/rootfs.domd.ext4
 FILE=./xen-generic-armv8-xt
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
 
+cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/yocto/build-domd/tmp/work/aarch64-poky-linux/xen/4.19.0+stable/git/xen/
+FILE=./xen-syms
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
+
 
 
 
