@@ -99,7 +99,7 @@ function build_params_nv_kvm( )
    COMMAND+=" ${Q_CPU}"
    COMMAND+=" ${Q_MEMORY}"
    COMMAND+=" ${Q_COMMON}"
-   # COMMAND+=" ${Q_LOGGING}"
+   COMMAND+=" ${Q_LOGGING}"
    # COMMAND+=" ${Q_RECORD}"
    # COMMAND+=" ${Q_MONITOR}"
    COMMAND+=" ${Q_KERNEL}"
