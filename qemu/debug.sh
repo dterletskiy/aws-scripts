@@ -20,9 +20,9 @@ XEN=${YOCTO_DIR}/xen-syms
 XEN_SRC=${YOCTO_DIR}/xen/
 
 COMMAND="gdb-multiarch"
-COMMAND+=" -q"
-COMMAND+=" --nh"
-COMMAND+=" -tui"
+# COMMAND+=" -q"
+# COMMAND+=" --nh"
+# COMMAND+=" -tui"
 COMMAND+=" -ex \"target remote localhost:1234\""
 COMMAND+=" -ex \"layout regs\""
 COMMAND+=" -ex \"set disassemble-next-line on\""
