@@ -5,6 +5,11 @@
 # info reg HCR_EL2
 # hbreak *0x00000000402005f8
 
+# sudo LD_LIBRARY_PATH=:/home/ubuntu/workspace//qemu/v9.0-nv-rfcv3-exp//deploy//usr/local//lib/:/home/ubuntu/workspace//qemu/v9.0-nv-rfcv3-exp//deploy//usr/local//lib/x86_64-linux-gnu/ gdb -ex "break kvm_arm_set_cpu_features_from_host" -ex "layout src" /home/ubuntu/workspace//qemu/v9.0-nv-rfcv3-exp//deploy//usr/local//bin/qemu-system-aarch64
+# run -machine virt,acpi=off,secure=off,accel=kvm,virtualization=on,iommu=smmuv3,gic-version=max  -cpu max  -m 8G  -nodefaults -no-reboot  -kernel /home/ubuntu/workspace//yocto//xen-generic-armv8-xt  -append "dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"        -device guest-loader,addr=0x60000000,kernel=/home/ubuntu/workspace//yocto//linux-dom0,bootargs="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"            -device guest-loader,addr=0x52000000,initrd=/home/ubuntu/workspace//yocto//rootfs.dom0.cpio.gz      -drive if=none,index=1,id=rootfs_domd,file=/home/ubuntu/workspace//yocto//rootfs.domd.ext4 -device virtio-blk-device,drive=rootfs_domd  -serial mon:stdio  -nographic
+
+
+
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
