@@ -17,6 +17,7 @@ mkdir -p ${QEMU_DUMP_DIR}
 COMMAND_FILE=${QEMU_DUMP_DIR}/command.txt
 
 QEMU_DT_DUMP_DIR=${QEMU_DUMP_DIR}/dtb/
+mkdir -p ${QEMU_DT_DUMP_DIR}
 QEMU_DTB_DUMP=${QEMU_DT_DUMP_DIR}/original.dtb
 QEMU_DTS_DUMP=${QEMU_DT_DUMP_DIR}/original.dts
 QEMU_DTB_DUMP_RECOMPILE=${QEMU_DT_DUMP_DIR}/recompiled.dtb
