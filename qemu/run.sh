@@ -28,6 +28,8 @@ QEMU_PID=${QEMU_DUMP_DIR}/pid.txt
 QEMU_DIR=${QEMU_DEPLOY_DIR}/usr/local/
 QEMU_ARM64=${QEMU_DIR}/bin/qemu-system-aarch64
 
+UBOOT=${YOCTO_DIR}/u-boot.bin
+
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
 XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
@@ -38,6 +40,47 @@ DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
 DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 
+
+function build_params( )
+{
+   Q_MACHINE="-machine virt"
+   Q_MACHINE+=",acpi=off"
+   Q_MACHINE+=",secure=off"
+   # Q_MACHINE+=",mte=on"
+   Q_MACHINE+=",accel=kvm"
+   Q_MACHINE+=",virtualization=on"
+   Q_MACHINE+=",iommu=smmuv3"
+   Q_MACHINE+=",gic-version=max"
+   # Q_MACHINE+=",its=off"
+   # Q_MACHINE+=" -enable-kvm
+
+   Q_CPU=" -cpu max"
+   # Q_CPU+=",sme=off"
+   # Q_CPU+=" -smp 4"
+
+   Q_MEMORY=" -m 8G"
+
+   Q_COMMON=""
+   Q_COMMON+=" -nodefaults"
+   Q_COMMON+=" -no-reboot"
+
+   Q_BIOS=" -bios ${UBOOT}"
+
+   Q_SERIAL=" -serial mon:stdio"
+
+   Q_GRAPHIC=" -nographic"
+
+   COMMAND="${QEMU_ARM64}"
+   COMMAND+=" ${Q_MACHINE}"
+   COMMAND+=" ${Q_CPU}"
+   COMMAND+=" ${Q_MEMORY}"
+   COMMAND+=" ${Q_COMMON}"
+   COMMAND+=" ${Q_BIOS}"
+   COMMAND+=" ${Q_SERIAL}"
+   COMMAND+=" ${Q_GRAPHIC}"
+
+   echo "${COMMAND}"
+}
 
 function build_params_nv_kvm( )
 {
@@ -268,7 +311,7 @@ function validate_parameters( )
       echo "'--mode' is defined but empty"
       exit 1
    else
-      ALLOWED_MODES=( "kvm" "nv" "nv_kvm" "kvm_nv" )
+      ALLOWED_MODES=( "kvm" "nv" "nv_kvm" "kvm_nv" "uboot" )
       if [[ ! "${ALLOWED_MODES[@]}" =~ "${CMD_MODE}" ]]; then
          echo "'--mode' is defined but invalid"
          exit 1
@@ -344,6 +387,9 @@ function main( )
       ;;
       kvm_nv|nv_kvm)
          COMMAND+=$( build_params_nv_kvm )
+      ;;
+      uboot)
+         COMMAND+=$( build_params )
       ;;
       *)
          echo "undefined CMD_MODE: '${CMD_MODE}'"
