@@ -16,12 +16,10 @@ FILE=./qemu-image-minimal-generic-armv8-xt.rootfs-20241116080357.ext4
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/rootfs.domd.ext4
 FILE=./xen-generic-armv8-xt
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt
+FILE=./xen-generic-armv8-xt-syms
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-generic-armv8-xt-syms
 FILE=./u-boot-generic-armv8-xt.bin
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/u-boot-generic-armv8-xt.bin
-
-cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/yocto/build-domd/tmp/work/aarch64-poky-linux/xen/4.19.0+stable/git/xen/
-FILE=./xen-syms
-scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/xen-syms
 
 
 
