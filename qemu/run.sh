@@ -28,7 +28,7 @@ QEMU_PID=${QEMU_DUMP_DIR}/pid.txt
 QEMU_DIR=${QEMU_DEPLOY_DIR}/usr/local/
 QEMU_ARM64=${QEMU_DIR}/bin/qemu-system-aarch64
 
-UBOOT=${YOCTO_DIR}/u-boot
+UBOOT=${YOCTO_DIR}/u-boot.bin
 
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
 XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
