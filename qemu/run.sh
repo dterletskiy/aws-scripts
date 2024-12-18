@@ -70,6 +70,9 @@ function build_params( )
 
    Q_GRAPHIC=" -nographic"
 
+   Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
+   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
+
    COMMAND="${QEMU_ARM64}"
    COMMAND+=" ${Q_MACHINE}"
    COMMAND+=" ${Q_CPU}"
@@ -78,6 +81,8 @@ function build_params( )
    COMMAND+=" ${Q_BIOS}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
+   COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
+   COMMAND+=" -device loader,file=${XEN},force-raw=on,addr=0x50000000"
 
    echo "${COMMAND}"
 }
