@@ -1,6 +1,6 @@
 KEY="/home/dmytro_terletskyi/.tda/aws/epam/c8g.metal-24xl-2024.11.19.pem"
 REMOTE_USER=ubuntu
-REMOTE_IP=35.80.29.188
+REMOTE_IP=35.95.80.83
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
 REMOTE_DIR="/home/ubuntu/workspace/yocto/"
 REMOTE_PATH=${REMOTE}:${REMOTE_DIR}
@@ -21,6 +21,10 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 FILE=xen-generic-armv8-xt-syms
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 FILE=u-boot-generic-armv8-xt.bin
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
+
+cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/
+FILE=full.img
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 
 

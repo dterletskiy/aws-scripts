@@ -38,6 +38,7 @@ DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=
 DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
 
 DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
+FULL_IMAGE=${YOCTO_DIR}/full.img
 
 
 
@@ -70,8 +71,9 @@ function build_params( )
 
    Q_GRAPHIC=" -nographic"
 
-   Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
-   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
+   Q_DRIVE_FULL=" -drive if=none,index=1,id=full,file=${FULL_IMAGE}"
+   Q_DRIVE_FULL+=" -device virtio-blk-device,drive=full"
+
 
    COMMAND="${QEMU_ARM64}"
    COMMAND+=" ${Q_MACHINE}"
@@ -81,10 +83,10 @@ function build_params( )
    COMMAND+=" ${Q_BIOS}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
-   COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
-   COMMAND+=" -device loader,file=${XEN},force-raw=on,addr=0x50000000"
-   COMMAND+=" -device loader,file=${DOM0_KERNEL},addr=0x60000000"
-   COMMAND+=" -device loader,file=${DOM0_INITRD},addr=0x52000000"
+   COMMAND+=" ${Q_DRIVE_FULL}"
+   # COMMAND+=" -device loader,file=${XEN},force-raw=on,addr=0x50000000"
+   # COMMAND+=" -device loader,file=${DOM0_KERNEL},addr=0x60000000"
+   # COMMAND+=" -device loader,file=${DOM0_INITRD},addr=0x52000000"
 
    echo "${COMMAND}"
 }
