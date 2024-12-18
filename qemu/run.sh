@@ -83,6 +83,8 @@ function build_params( )
    COMMAND+=" ${Q_GRAPHIC}"
    COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
    COMMAND+=" -device loader,file=${XEN},force-raw=on,addr=0x50000000"
+   COMMAND+=" -device loader,file=${DOM0_KERNEL},addr=0x60000000"
+   COMMAND+=" -device loader,file=${DOM0_INITRD},addr=0x52000000"
 
    echo "${COMMAND}"
 }
