@@ -22,7 +22,7 @@ KVMTOOL_DTB_DUMP_RECOMPILE=${KVMTOOL_DT_DUMP_DIR}/recompiled.dtb
 UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
 
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
-XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
+XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart dom0_kernel=dom0_kernel=/boot/vmlinuz/linux-domd"
 
 DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
 DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"
@@ -34,15 +34,16 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 COMMAND=""
 COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
-COMMAND+=" -k ${UBOOT}"
-# COMMAND+=" -k ${XEN}"
-# COMMAND+=" -p \"${XEN_CMD_LINE}\""
+# COMMAND+=" -k ${UBOOT}"
+COMMAND+=" -k ${XEN}"
+COMMAND+=" -p \"${XEN_CMD_LINE}\""
+COMMAND+=" -i ${DOM0_INITRD}"
 COMMAND+=" -m 8G"
 COMMAND+=" -c 1"
-# COMMAND+=" --debug"
-# COMMAND+=" --e2h0"
-# COMMAND+=" --nested"
-# COMMAND+=" --dump-dtb ${KVMTOOL_DTB_DUMP}"
+COMMAND+=" --debug"
+COMMAND+=" --e2h0"
+COMMAND+=" --nested"
+COMMAND+=" --dump-dtb ${KVMTOOL_DTB_DUMP}"
 execute ${COMMAND}
 
 decompile_dt ${KVMTOOL_DTB_DUMP} ${KVMTOOL_DTS_DUMP}
