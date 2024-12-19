@@ -22,7 +22,7 @@ KVMTOOL_DTB_DUMP_RECOMPILE=${KVMTOOL_DT_DUMP_DIR}/recompiled.dtb
 UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
 
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
-XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart dom0_kernel=dom0_kernel=/boot/vmlinuz/linux-domd"
+XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart dom0_kernel=/usr/lib/xen/boot/linux-domd"
 
 DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
 DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"
