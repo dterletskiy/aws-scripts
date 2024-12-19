@@ -19,6 +19,8 @@ KVMTOOL_DTB_DUMP=${KVMTOOL_DT_DUMP_DIR}/original.dtb
 KVMTOOL_DTS_DUMP=${KVMTOOL_DT_DUMP_DIR}/original.dts
 KVMTOOL_DTB_DUMP_RECOMPILE=${KVMTOOL_DT_DUMP_DIR}/recompiled.dtb
 
+UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
+
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
 XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
@@ -32,8 +34,9 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 COMMAND=""
 COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
-COMMAND+=" -k ${XEN}"
-COMMAND+=" -p \"${XEN_CMD_LINE}\""
+COMMAND+=" -f ${XEN}"
+# COMMAND+=" -k ${XEN}"
+# COMMAND+=" -p \"${XEN_CMD_LINE}\""
 COMMAND+=" -m 8G"
 COMMAND+=" -c 1"
 COMMAND+=" --debug"
