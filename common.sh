@@ -26,3 +26,21 @@ function execute( )
    echo "${COMMAND}"
    eval "${COMMAND}"
 }
+
+function compile_dt( )
+{
+   local IN_DTS=${1}
+   local OUT_DTB=${2}
+
+   local COMMAND="dtc -I dts -O dtb -o ${OUT_DTB} ${IN_DTS}"
+   execute "${COMMAND}"
+}
+
+function decompile_dt( )
+{
+   local IN_DTB=${1}
+   local OUT_DTS=${2}
+
+   local COMMAND="dtc -I dtb -O dts -o ${OUT_DTS} ${IN_DTB}"
+   execute "${COMMAND}"
+}

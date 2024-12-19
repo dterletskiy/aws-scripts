@@ -11,6 +11,14 @@ clear
 
 
 
+KVMTOOL_DUMP_DIR=${DUMP_DIR}/kvmtool/${TIMESTAMP}/
+mkdir -p ${KVMTOOL_DUMP_DIR}
+KVMTOOL_DT_DUMP_DIR=${KVMTOOL_DUMP_DIR}/dtb/
+mkdir -p ${KVMTOOL_DT_DUMP_DIR}
+KVMTOOL_DTB_DUMP=${KVMTOOL_DT_DUMP_DIR}/original.dtb
+KVMTOOL_DTS_DUMP=${KVMTOOL_DT_DUMP_DIR}/original.dts
+KVMTOOL_DTB_DUMP_RECOMPILE=${KVMTOOL_DT_DUMP_DIR}/recompiled.dtb
+
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
 XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
@@ -31,4 +39,8 @@ COMMAND+=" -c 1"
 COMMAND+=" --debug"
 COMMAND+=" --e2h0"
 COMMAND+=" --nested"
+COMMAND+=" --dump-dtb ${KVMTOOL_DTB_DUMP}"
 execute ${COMMAND}
+
+decompile_dt ${KVMTOOL_DTB_DUMP} ${KVMTOOL_DTS_DUMP}
+compile_dt ${KVMTOOL_DTS_DUMP} ${KVMTOOL_DTB_DUMP_RECOMPILE}
