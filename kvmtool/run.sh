@@ -34,15 +34,15 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 COMMAND=""
 COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
-COMMAND+=" -k ${UBOOT}"
-# COMMAND+=" -k ${XEN}"
+# COMMAND+=" -k ${UBOOT}"
+COMMAND+=" -k ${XEN}"
 COMMAND+=" -p \"${XEN_CMD_LINE}\""
 COMMAND+=" -m 8G"
 COMMAND+=" -c 1"
-# COMMAND+=" --debug"
-# COMMAND+=" --e2h0"
-# COMMAND+=" --nested"
-# COMMAND+=" --dump-dtb ${KVMTOOL_DTB_DUMP}"
+COMMAND+=" --debug"
+COMMAND+=" --e2h0"
+COMMAND+=" --nested"
+COMMAND+=" --dump-dtb ${KVMTOOL_DTB_DUMP}"
 execute ${COMMAND}
 
 decompile_dt ${KVMTOOL_DTB_DUMP} ${KVMTOOL_DTS_DUMP}
