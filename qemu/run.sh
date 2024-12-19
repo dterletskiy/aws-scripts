@@ -85,7 +85,7 @@ function build_params( )
    COMMAND+=" ${Q_MEMORY}"
    COMMAND+=" ${Q_COMMON}"
    COMMAND+=" ${Q_BIOS}"
-   COMMAND+=" ${Q_DTB}"
+   # COMMAND+=" ${Q_DTB}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
    COMMAND+=" ${Q_DRIVE_FULL}"
