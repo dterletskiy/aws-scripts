@@ -26,7 +26,7 @@ XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart dom0
 
 DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
 DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"
-DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio
+DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
 
 DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
