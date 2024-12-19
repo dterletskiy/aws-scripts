@@ -28,6 +28,8 @@ QEMU_PID=${QEMU_DUMP_DIR}/pid.txt
 QEMU_DIR=${QEMU_DEPLOY_DIR}/usr/local/
 QEMU_ARM64=${QEMU_DIR}/bin/qemu-system-aarch64
 
+DTB=/home/ubuntu/workspace/dump/kvmtool/2024.12.19_10.01.39/dtb/original.dtb
+
 UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
 
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
@@ -67,6 +69,8 @@ function build_params( )
 
    Q_BIOS=" -bios ${UBOOT}"
 
+   Q_DTB=" -dtb ${DTB}"
+
    Q_SERIAL=" -serial mon:stdio"
 
    Q_GRAPHIC=" -nographic"
@@ -81,6 +85,7 @@ function build_params( )
    COMMAND+=" ${Q_MEMORY}"
    COMMAND+=" ${Q_COMMON}"
    COMMAND+=" ${Q_BIOS}"
+   COMMAND+=" ${Q_DTB}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
    COMMAND+=" ${Q_DRIVE_FULL}"

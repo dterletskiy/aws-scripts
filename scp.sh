@@ -33,4 +33,4 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 
 
 
-scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/dump/qemu/ .
+scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/dump/ /home/dmytro_terletskyi/Downloads/aws/dump/
