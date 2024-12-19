@@ -34,8 +34,8 @@ DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
 
 COMMAND=""
 COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
-COMMAND+=" -k ${UBOOT}"
-# COMMAND+=" -k ${XEN}"
+# COMMAND+=" -k ${UBOOT}"
+COMMAND+=" -k ${XEN}"
 # COMMAND+=" -p \"${XEN_CMD_LINE}\""
 COMMAND+=" -m 8G"
 COMMAND+=" -c 1"
