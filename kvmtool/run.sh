@@ -31,16 +31,26 @@ DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=
 DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
 
 DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
+FULL_IMG=${YOCTO_DIR}/full_bench_efi.img
 
 
 
 COMMAND=""
 COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
+
 # COMMAND+=" -k ${UBOOT}"
-COMMAND+=" -f /home/ubuntu/workspace/edk2/edk2-stable202411/source/Build/ArmVirtQemu-AARCH64/DEBUG_GCC5/FV/QEMU_EFI.fd"
-# COMMAND+=" -k ${XEN}"
-# COMMAND+=" -p \"${XEN_CMD_LINE}\""
-# COMMAND+=" -i ${DOM0_KERNEL}"
+
+# COMMAND+=" -f /home/ubuntu/workspace/edk2/edk2-stable202411/source/Build/ArmVirtQemu-AARCH64/DEBUG_GCC5/FV/QEMU_EFI.fd"
+
+COMMAND+=" -k ${DOM0_KERNEL}"
+COMMAND+=" -p \"${DOM0_KERNEL_CMD_LINE}\""
+COMMAND+=" -i ${DOM0_KERNEL}"
+
+COMMAND+=" -x ${XEN}"
+COMMAND+=" -y \"${XEN_CMD_LINE}\""
+
+COMMAND+=" -d ${FULL_IMG}"
+
 COMMAND+=" -m 8G"
 COMMAND+=" -c 1"
 COMMAND+=" --debug"

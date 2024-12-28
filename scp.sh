@@ -1,6 +1,6 @@
 KEY="/home/dmytro_terletskyi/.tda/aws/epam/c8g.metal-24xl-2024.11.19.pem"
 REMOTE_USER=ubuntu
-REMOTE_IP=35.95.103.14
+REMOTE_IP=35.87.159.141
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
 REMOTE_DIR="/home/ubuntu/workspace/yocto/"
 REMOTE_PATH=${REMOTE}:${REMOTE_DIR}
