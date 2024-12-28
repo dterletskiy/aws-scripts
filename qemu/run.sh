@@ -281,7 +281,7 @@ function build_params_kvm( )
    COMMAND+=" ${Q_MEMORY}"
    COMMAND+=" ${Q_COMMON}"
    COMMAND+=" ${Q_KERNEL}"
-   COMMAND+=" ${Q_KERNEL}"
+   COMMAND+=" ${Q_APPEND}"
    COMMAND+=" ${Q_INITRD}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
