@@ -44,7 +44,7 @@ COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
 
 COMMAND+=" -k ${DOM0_KERNEL}"
 COMMAND+=" -p \"${DOM0_KERNEL_CMD_LINE}\""
-COMMAND+=" -i ${DOM0_KERNEL}"
+COMMAND+=" -i ${DOM0_INITRD}"
 
 COMMAND+=" -x ${XEN}"
 COMMAND+=" -y \"${XEN_CMD_LINE}\""
