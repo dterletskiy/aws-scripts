@@ -28,18 +28,23 @@ QEMU_PID=${QEMU_DUMP_DIR}/pid.txt
 QEMU_DIR=${QEMU_DEPLOY_DIR}/usr/local/
 QEMU_ARM64=${QEMU_DIR}/bin/qemu-system-aarch64
 
-DTB=/home/ubuntu/workspace/dump/kvmtool/2024.12.19_10.01.39/dtb/original.dtb
+DTB=
 
 UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
 
 XEN=${YOCTO_DIR}/xen-generic-armv8-xt
-XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
+XEN_CMDLINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
 DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
-DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen nokaslr"
+DOM0_KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen nokaslr"
 DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
 
 DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
+
+KERNEL=${YOCTO_DIR}/linux-dom0
+KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"
+INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
+
 FULL_IMAGE=${YOCTO_DIR}/full.img
 
 
@@ -55,7 +60,6 @@ function build_params_uboot( )
    Q_MACHINE+=",iommu=smmuv3"
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
-   # Q_MACHINE+=" -enable-kvm
 
    Q_KVM+=" -enable-kvm"
 
@@ -97,11 +101,11 @@ function build_params_nv_kvm( )
    # Q_CPU+=" -smp 4"
 
    Q_KERNEL=" -kernel ${XEN}"
-   Q_APPEND=" -append \"${XEN_CMD_LINE}\""
+   Q_APPEND=" -append \"${XEN_CMDLINE}\""
    Q_INITRD=" -initrd ${DOM0_INITRD}"
 
    Q_GUEST_LOADER_DOM0_KERNEL=" \
-      -device guest-loader,addr=0x60000000,kernel=${DOM0_KERNEL},bootargs=\"${DOM0_KERNEL_CMD_LINE}\" \
+      -device guest-loader,addr=0x60000000,kernel=${DOM0_KERNEL},bootargs=\"${DOM0_KERNEL_CMDLINE}\" \
    "
    Q_GUEST_LOADER_DOM0_INITRD=" \
       -device guest-loader,addr=0x52000000,initrd=${DOM0_INITRD} \
@@ -141,11 +145,11 @@ function build_params_nv( )
    # Q_CPU+=" -smp 4"
 
    Q_KERNEL=" -kernel ${XEN}"
-   Q_APPEND=" -append \"${XEN_CMD_LINE}\""
+   Q_APPEND=" -append \"${XEN_CMDLINE}\""
    Q_INITRD=" -initrd ${DOM0_INITRD}"
 
    Q_GUEST_LOADER_DOM0_KERNEL=" \
-      -device guest-loader,addr=0x60000000,kernel=${DOM0_KERNEL},bootargs=\"${DOM0_KERNEL_CMD_LINE}\" \
+      -device guest-loader,addr=0x60000000,kernel=${DOM0_KERNEL},bootargs=\"${DOM0_KERNEL_CMDLINE}\" \
    "
    Q_GUEST_LOADER_DOM0_INITRD=" \
       -device guest-loader,addr=0x52000000,initrd=${DOM0_INITRD} \
@@ -168,8 +172,6 @@ function build_params_nv( )
 
 function build_params_kvm( )
 {
-   local LOCAL_DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0"
-
    Q_MACHINE="-machine virt"
    Q_MACHINE+=",acpi=off"
    Q_MACHINE+=",secure=off"
@@ -186,9 +188,9 @@ function build_params_kvm( )
    # Q_CPU+=",sme=off"
    # Q_CPU+=" -smp 4"
 
-   Q_KERNEL=" -kernel ${DOM0_KERNEL}"
-   Q_APPEND=" -append \"${LOCAL_DOM0_KERNEL_CMD_LINE}\""
-   Q_INITRD=" -initrd ${DOM0_INITRD}"
+   Q_KERNEL=" -kernel ${KERNEL}"
+   Q_APPEND=" -append \"${KERNEL_CMDLINE}\""
+   Q_INITRD=" -initrd ${INITRD}"
 
    COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
@@ -202,8 +204,6 @@ function build_params_kvm( )
 
 function build_params_kvm_virt( )
 {
-   local LOCAL_DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0"
-
    Q_MACHINE="-machine virt"
    Q_MACHINE+=",acpi=off"
    Q_MACHINE+=",secure=off"
@@ -220,9 +220,9 @@ function build_params_kvm_virt( )
    # Q_CPU+=",sme=off"
    # Q_CPU+=" -smp 4"
 
-   Q_KERNEL=" -kernel ${DOM0_KERNEL}"
-   Q_APPEND=" -append \"${LOCAL_DOM0_KERNEL_CMD_LINE}\""
-   Q_INITRD=" -initrd ${DOM0_INITRD}"
+   Q_KERNEL=" -kernel ${KERNEL}"
+   Q_APPEND=" -append \"${KERNEL_CMDLINE}\""
+   Q_INITRD=" -initrd ${INITRD}"
 
    COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
@@ -292,7 +292,7 @@ function validate_parameters( )
       echo "'--mode' is defined but empty"
       exit 1
    else
-      ALLOWED_MODES=( "kvm" "nv" "nv_kvm" "kvm_nv" "uboot" )
+      ALLOWED_MODES=( "kvm" "kvm_virt" "virt_kvm" "nv" "nv_kvm" "kvm_nv" "uboot" )
       if [[ ! "${ALLOWED_MODES[@]}" =~ "${CMD_MODE}" ]]; then
          echo "'--mode' is defined but invalid"
          exit 1
@@ -362,6 +362,9 @@ function main( )
    case ${CMD_MODE} in
       kvm)
          COMMAND+=$( build_params_kvm )
+      ;;
+      kvm_virt|virt_kvm)
+         COMMAND+=$( build_params_kvm_virt )
       ;;
       nv)
          COMMAND+=$( build_params_nv )
