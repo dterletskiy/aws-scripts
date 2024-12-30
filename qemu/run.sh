@@ -36,7 +36,7 @@ XEN=${YOCTO_DIR}/xen-generic-armv8-xt
 XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
 DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
-DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"
+DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen nokaslr"
 DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
 
 DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
@@ -44,7 +44,7 @@ FULL_IMAGE=${YOCTO_DIR}/full.img
 
 
 
-function build_params( )
+function build_params_uboot( )
 {
    Q_MACHINE="-machine virt"
    Q_MACHINE+=",acpi=off"
@@ -57,41 +57,23 @@ function build_params( )
    # Q_MACHINE+=",its=off"
    # Q_MACHINE+=" -enable-kvm
 
+   Q_KVM+=" -enable-kvm"
+
    Q_CPU=" -cpu max"
    # Q_CPU+=",sme=off"
    # Q_CPU+=" -smp 4"
 
-   Q_MEMORY=" -m 8G"
-
-   Q_COMMON=""
-   Q_COMMON+=" -nodefaults"
-   Q_COMMON+=" -no-reboot"
-
    Q_BIOS=" -bios ${UBOOT}"
-
-   Q_DTB=" -dtb ${DTB}"
-
-   Q_SERIAL=" -serial mon:stdio"
-
-   Q_GRAPHIC=" -nographic"
 
    Q_DRIVE_FULL=" -drive if=none,index=1,id=full,file=${FULL_IMAGE}"
    Q_DRIVE_FULL+=" -device virtio-blk-device,drive=full"
 
 
-   COMMAND="${QEMU_ARM64}"
+   COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
    COMMAND+=" ${Q_CPU}"
-   COMMAND+=" ${Q_MEMORY}"
-   COMMAND+=" ${Q_COMMON}"
    COMMAND+=" ${Q_BIOS}"
-   # COMMAND+=" ${Q_DTB}"
-   COMMAND+=" ${Q_SERIAL}"
-   COMMAND+=" ${Q_GRAPHIC}"
    COMMAND+=" ${Q_DRIVE_FULL}"
-   # COMMAND+=" -device loader,file=${XEN},force-raw=on,addr=0x50000000"
-   # COMMAND+=" -device loader,file=${DOM0_KERNEL},addr=0x60000000"
-   # COMMAND+=" -device loader,file=${DOM0_INITRD},addr=0x52000000"
 
    echo "${COMMAND}"
 }
@@ -107,31 +89,12 @@ function build_params_nv_kvm( )
    Q_MACHINE+=",iommu=smmuv3"
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
-   # Q_MACHINE+=" -enable-kvm
+
+   Q_KVM+=" -enable-kvm"
 
    Q_CPU=" -cpu max"
    # Q_CPU+=",sme=off"
    # Q_CPU+=" -smp 4"
-
-   Q_MEMORY=" -m 8G"
-
-   Q_COMMON=""
-   Q_COMMON+=" -nodefaults"
-   Q_COMMON+=" -no-reboot"
-
-   Q_LOGGING=""
-   Q_LOGGING+=" -D ${QEMU_LOG_DUMP}"
-   Q_LOGGING+=" -d guest_errors"
-   Q_LOGGING+=",cpu"
-   Q_LOGGING+=",cpu_reset"
-   Q_LOGGING+=",out_asm"
-   Q_LOGGING+=",in_asm"
-   Q_LOGGING+=",int"
-   # Q_LOGGING+=" -pidfile ${QEMU_PID_DUMP}"
-
-   Q_RECORD=" -icount shift=auto,rr=record,rrfile=${QEMU_RECORD_DUMP}"
-
-   Q_MONITOR+=" -monitor tcp:127.0.0.1:4444,server,nowait"
 
    Q_KERNEL=" -kernel ${XEN}"
    Q_APPEND=" -append \"${XEN_CMD_LINE}\""
@@ -144,28 +107,17 @@ function build_params_nv_kvm( )
       -device guest-loader,addr=0x52000000,initrd=${DOM0_INITRD} \
    "
 
-   Q_SERIAL=" -serial mon:stdio"
-
-   Q_GRAPHIC=" -nographic"
-
    Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
    Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
 
-   COMMAND="${QEMU_ARM64}"
+   COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
    COMMAND+=" ${Q_CPU}"
-   COMMAND+=" ${Q_MEMORY}"
-   COMMAND+=" ${Q_COMMON}"
-   # COMMAND+=" ${Q_LOGGING}"
-   # COMMAND+=" ${Q_RECORD}"
-   # COMMAND+=" ${Q_MONITOR}"
    COMMAND+=" ${Q_KERNEL}"
    COMMAND+=" ${Q_APPEND}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_KERNEL}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_INITRD}"
    COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
-   COMMAND+=" ${Q_SERIAL}"
-   COMMAND+=" ${Q_GRAPHIC}"
 
    echo "${COMMAND}"
 }
@@ -181,31 +133,12 @@ function build_params_nv( )
    Q_MACHINE+=",iommu=smmuv3"
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
-   # Q_MACHINE+=" -enable-kvm
+
+   Q_KVM+=" -enable-kvm"
 
    Q_CPU=" -cpu max"
    Q_CPU+=",sme=off"
    # Q_CPU+=" -smp 4"
-
-   Q_MEMORY=" -m 8G"
-
-   Q_COMMON=""
-   Q_COMMON+=" -nodefaults"
-   Q_COMMON+=" -no-reboot"
-
-   Q_LOGGING=""
-   Q_LOGGING+=" -D ${QEMU_LOG_DUMP}"
-   Q_LOGGING+=" -d guest_errors"
-   Q_LOGGING+=",cpu"
-   Q_LOGGING+=",cpu_reset"
-   Q_LOGGING+=",out_asm"
-   Q_LOGGING+=",in_asm"
-   Q_LOGGING+=",int"
-   # Q_LOGGING+=" -pidfile ${QEMU_PID_DUMP}"
-
-   Q_RECORD=" -icount shift=auto,rr=record,rrfile=${QEMU_RECORD_DUMP}"
-
-   Q_MONITOR+=" -monitor tcp:127.0.0.1:4444,server,nowait"
 
    Q_KERNEL=" -kernel ${XEN}"
    Q_APPEND=" -append \"${XEN_CMD_LINE}\""
@@ -218,34 +151,25 @@ function build_params_nv( )
       -device guest-loader,addr=0x52000000,initrd=${DOM0_INITRD} \
    "
 
-   Q_SERIAL=" -serial mon:stdio"
-
-   Q_GRAPHIC=" -nographic"
-
    Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
    Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
 
-   COMMAND="${QEMU_ARM64}"
+   COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
    COMMAND+=" ${Q_CPU}"
-   COMMAND+=" ${Q_MEMORY}"
-   COMMAND+=" ${Q_COMMON}"
-   # COMMAND+=" ${Q_LOGGING}"
-   # COMMAND+=" ${Q_RECORD}"
-   # COMMAND+=" ${Q_MONITOR}"
    COMMAND+=" ${Q_KERNEL}"
    COMMAND+=" ${Q_APPEND}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_KERNEL}"
    COMMAND+=" ${Q_GUEST_LOADER_DOM0_INITRD}"
    COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
-   COMMAND+=" ${Q_SERIAL}"
-   COMMAND+=" ${Q_GRAPHIC}"
 
    echo "${COMMAND}"
 }
 
 function build_params_kvm( )
 {
+   local LOCAL_DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0"
+
    Q_MACHINE="-machine virt"
    Q_MACHINE+=",acpi=off"
    Q_MACHINE+=",secure=off"
@@ -255,36 +179,97 @@ function build_params_kvm( )
    Q_MACHINE+=",iommu=smmuv3"
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
-   # Q_MACHINE+=" -enable-kvm
+
+   Q_KVM+=" -enable-kvm"
 
    Q_CPU=" -cpu max"
    # Q_CPU+=",sme=off"
    # Q_CPU+=" -smp 4"
 
+   Q_KERNEL=" -kernel ${DOM0_KERNEL}"
+   Q_APPEND=" -append \"${LOCAL_DOM0_KERNEL_CMD_LINE}\""
+   Q_INITRD=" -initrd ${DOM0_INITRD}"
+
+   COMMAND=""
+   COMMAND+=" ${Q_MACHINE}"
+   COMMAND+=" ${Q_CPU}"
+   COMMAND+=" ${Q_KERNEL}"
+   COMMAND+=" ${Q_APPEND}"
+   COMMAND+=" ${Q_INITRD}"
+
+   echo "${COMMAND}"
+}
+
+function build_params_kvm_virt( )
+{
+   local LOCAL_DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0"
+
+   Q_MACHINE="-machine virt"
+   Q_MACHINE+=",acpi=off"
+   Q_MACHINE+=",secure=off"
+   # Q_MACHINE+=",mte=on"
+   Q_MACHINE+=",accel=kvm"
+   Q_MACHINE+=",virtualization=on"
+   Q_MACHINE+=",iommu=smmuv3"
+   Q_MACHINE+=",gic-version=max"
+   # Q_MACHINE+=",its=off"
+
+   Q_KVM+=" -enable-kvm"
+
+   Q_CPU=" -cpu max"
+   # Q_CPU+=",sme=off"
+   # Q_CPU+=" -smp 4"
+
+   Q_KERNEL=" -kernel ${DOM0_KERNEL}"
+   Q_APPEND=" -append \"${LOCAL_DOM0_KERNEL_CMD_LINE}\""
+   Q_INITRD=" -initrd ${DOM0_INITRD}"
+
+   COMMAND=""
+   COMMAND+=" ${Q_MACHINE}"
+   COMMAND+=" ${Q_CPU}"
+   COMMAND+=" ${Q_KERNEL}"
+   COMMAND+=" ${Q_APPEND}"
+   COMMAND+=" ${Q_INITRD}"
+
+   echo "${COMMAND}"
+}
+
+function build_params_common( )
+{
    Q_MEMORY=" -m 8G"
 
    Q_COMMON=""
    Q_COMMON+=" -nodefaults"
    Q_COMMON+=" -no-reboot"
 
-   Q_KERNEL=" -kernel ${DOM0_KERNEL}"
-   Q_APPEND=" -append \"${DOM0_KERNEL_CMD_LINE}\""
-   Q_INITRD=" -initrd ${DOM0_INITRD}"
-
    Q_SERIAL=" -serial mon:stdio"
 
    Q_GRAPHIC=" -nographic"
 
-   COMMAND="${QEMU_ARM64}"
-   COMMAND+=" ${Q_MACHINE}"
-   COMMAND+=" ${Q_CPU}"
+   Q_LOGGING=""
+   Q_LOGGING+=" -D ${QEMU_LOG_DUMP}"
+   Q_LOGGING+=" -d guest_errors"
+   Q_LOGGING+=",cpu"
+   Q_LOGGING+=",cpu_reset"
+   Q_LOGGING+=",out_asm"
+   Q_LOGGING+=",in_asm"
+   Q_LOGGING+=",int"
+   Q_LOGGING+=" -pidfile ${QEMU_PID_DUMP}"
+
+   Q_RECORD=" -icount shift=auto,rr=record,rrfile=${QEMU_RECORD_DUMP}"
+
+   Q_MONITOR+=" -monitor tcp:127.0.0.1:4444,server,nowait"
+
+
+
+   COMMAND=" "
    COMMAND+=" ${Q_MEMORY}"
    COMMAND+=" ${Q_COMMON}"
-   COMMAND+=" ${Q_KERNEL}"
-   COMMAND+=" ${Q_APPEND}"
-   COMMAND+=" ${Q_INITRD}"
    COMMAND+=" ${Q_SERIAL}"
    COMMAND+=" ${Q_GRAPHIC}"
+   # COMMAND+=" ${Q_LOGGING}"
+   # COMMAND+=" ${Q_RECORD}"
+   # COMMAND+=" ${Q_MONITOR}"
 
    echo "${COMMAND}"
 }
@@ -372,7 +357,7 @@ function main( )
 {
    parse_arguments "$@"
 
-   COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} "
+   COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${QEMU_ARM64}"
 
    case ${CMD_MODE} in
       kvm)
@@ -385,13 +370,15 @@ function main( )
          COMMAND+=$( build_params_nv_kvm )
       ;;
       uboot)
-         COMMAND+=$( build_params )
+         COMMAND+=$( build_params_uboot )
       ;;
       *)
          echo "undefined CMD_MODE: '${CMD_MODE}'"
          exit 1
       ;;
    esac
+
+   COMMAND+=$( build_params_common )
 
    execute "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
 
