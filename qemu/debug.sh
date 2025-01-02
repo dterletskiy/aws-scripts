@@ -10,6 +10,27 @@
 
 
 
+# gdb /home/ubuntu/workspace/kernel/kvm-arm64/nv-next/build/vmlinux
+# (gdb) add-auto-load-safe-path /home/ubuntu/workspace/kernel/kvm-arm64/nv-next/source/scripts/gdb/vmlinux-gdb.py
+# (gdb) target remote :1234
+# (gdb) set disassemble-next-line on
+# (gdb) hb primary_entry
+# (gdb) hb start_kernel
+# (gdb) c
+# (gdb) x/32i 0x0000000040000000
+# (gdb) x/32i 0xffff8000820711b0
+# gdb /home/ubuntu/workspace/kernel/torvalds/linux/vmlinux \
+#    -ex "add-auto-load-safe-path /home/ubuntu/workspace/kernel/torvalds/linux/scripts/gdb/vmlinux-gdb.py" \
+#    -ex "set directories /home/ubuntu/workspace/kernel/torvalds/linux/" \
+#    -ex "target remote :1234" \
+#    -ex "set disassemble-next-line on" \
+#    -ex "hb primary_entry" \
+#    -ex "hb __primary_switch" \
+#    -ex "hb __primary_switched" \
+#    -ex "hb start_kernel"
+
+
+
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
