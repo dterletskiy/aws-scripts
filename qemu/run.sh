@@ -30,6 +30,11 @@ QEMU_PID=${QEMU_DUMP_DIR}/pid.txt
 QEMU_DIR=${QEMU_DEPLOY_DIR}/usr/local/
 QEMU_ARM64=${QEMU_DIR}/bin/qemu-system-aarch64
 
+
+QEMU_EFI_DIR=$(root_dir)/edk2/edk2-stable202411/source/Build/ArmVirtQemu-AARCH64/DEBUG_GCC5/FV/
+QEMU_EFI_ARM64=${QEMU_EFI_DIR}/QEMU_EFI-pflash.raw
+QEMU_VARS_ARM64=${QEMU_EFI_DIR}/QEMU_VARS-pflash.raw
+
 DTB=
 
 UBOOT=$(yocto_dir)/u-boot-generic-armv8-xt.bin
@@ -47,9 +52,42 @@ KERNEL=$(yocto_dir)/linux-dom0
 KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"
 INITRD=$(yocto_dir)/rootfs.dom0.cpio.gz
 
-FULL_IMAGE=$(yocto_dir)/full.img
+# FULL_IMAGE=$(yocto_dir)/full.img
+FULL_IMAGE=$(yocto_dir)/full_bench_efi.img
 
 
+
+function build_params_efi( )
+{
+   Q_MACHINE="-machine virt"
+   Q_MACHINE+=",acpi=off"
+   Q_MACHINE+=",secure=off"
+   # Q_MACHINE+=",mte=on"
+   Q_MACHINE+=",accel=kvm"
+   Q_MACHINE+=",virtualization=on"
+   Q_MACHINE+=",iommu=smmuv3"
+   Q_MACHINE+=",gic-version=max"
+   # Q_MACHINE+=",its=off"
+
+   Q_KVM+=" -enable-kvm"
+
+   Q_CPU=" -cpu max"
+   # Q_CPU+=",sme=off"
+   # Q_CPU+=" -smp 4"
+
+   Q_DRIVE_FULL=" -drive if=none,index=1,id=full,file=${FULL_IMAGE}"
+   Q_DRIVE_FULL+=" -device virtio-blk-device,drive=full"
+
+
+   COMMAND=""
+   COMMAND+=" ${Q_MACHINE}"
+   COMMAND+=" ${Q_CPU}"
+   COMMAND+=" ${Q_DRIVE_FULL}"
+   COMMAND+=" -drive if=pflash,format=raw,readonly=on,file=${QEMU_EFI_ARM64},size=64M"
+   COMMAND+=" -drive if=pflash,format=raw,file=${QEMU_VARS_ARM64},size=64M"
+
+   echo "${COMMAND}"
+}
 
 function build_params_uboot( )
 {
@@ -294,7 +332,7 @@ function validate_parameters( )
       echo "'--mode' is defined but empty"
       exit 1
    else
-      ALLOWED_MODES=( "kvm" "kvm_virt" "virt_kvm" "nv" "nv_kvm" "kvm_nv" "uboot" )
+      ALLOWED_MODES=( "kvm" "kvm_virt" "virt_kvm" "nv" "nv_kvm" "kvm_nv" "uboot" "efi" )
       if [[ ! "${ALLOWED_MODES[@]}" =~ "${CMD_MODE}" ]]; then
          echo "'--mode' is defined but invalid"
          exit 1
@@ -376,6 +414,9 @@ function main( )
       ;;
       uboot)
          COMMAND+=$( build_params_uboot )
+      ;;
+      efi)
+         COMMAND+=$( build_params_efi )
       ;;
       *)
          echo "undefined CMD_MODE: '${CMD_MODE}'"

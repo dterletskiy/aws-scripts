@@ -40,7 +40,7 @@ COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
 
 # COMMAND+=" -k ${UBOOT}"
 
-# COMMAND+=" -f /home/ubuntu/workspace/edk2/edk2-stable202411/source/Build/ArmVirtQemu-AARCH64/DEBUG_GCC5/FV/QEMU_EFI.fd"
+# COMMAND+=" -f /home/ubuntu/workspace/edk2/edk2-stable202411/source/Build/ArmVirtKvmTool-AARCH64/DEBUG_GCC5/FV/KVMTOOL_EFI.fd"
 
 COMMAND+=" -k ${DOM0_KERNEL}"
 COMMAND+=" -p \"${DOM0_KERNEL_CMDLINE}\""
