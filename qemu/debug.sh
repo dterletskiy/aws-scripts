@@ -11,20 +11,6 @@
 
 
 # https://www.kernel.org/doc/html/v4.14/dev-tools/gdb-kernel-debugging.html
-objdump -S /home/ubuntu/workspace/kernel/torvalds/linux/vmlinux
-gdb /home/ubuntu/workspace/kernel/torvalds/linux/vmlinux \
-   -ex "add-auto-load-safe-path /home/ubuntu/workspace/kernel/torvalds/linux/scripts/gdb/vmlinux-gdb.py" \
-   -ex "set directories /home/ubuntu/workspace/kernel/torvalds/linux/" \
-   -ex "target remote :1234" \
-   -ex "set disassemble-next-line on" \
-   -ex "lx-symbols" \
-   -ex "hb primary_entry" \
-   -ex "hb __primary_switch" \
-   -ex "hb __primary_switched" \
-   -ex "hb finalise_el2" \
-   # -ex "hb elx_sync" \
-   # -ex "hb __finalise_el2" \
-   -ex "hb start_kernel"
 
 
 
@@ -39,28 +25,74 @@ clear
 
 
 
+DUMP_DIR=$(dump_dir)/gdb/${TIMESTAMP}/
+mkdir -p ${DUMP_DIR}
+COMMAND_FILE=${DUMP_DIR}/command.txt
+LOG_FILE=${DUMP_DIR}/log.txt
+
 XEN=$(yocto_dir)/xen-syms
 XEN_SRC=$(yocto_dir)/xen/
 
+LINUX_ROOT=/home/ubuntu/workspace/kernel/torvalds/linux/
+LINUX=${LINUX_ROOT}/vmlinux
+LINUX_SOURCE=${LINUX_ROOT}
+LINUX_SCRIPT=${LINUX_ROOT}/scripts/gdb/vmlinux-gdb.py
+
+
+
+
+
+
+
+# objdump -S ${LINUX}
+
 COMMAND="gdb-multiarch"
-# COMMAND+=" -q"
-# COMMAND+=" --nh"
-# COMMAND+=" -tui"
-# COMMAND+=" -ex \"layout regs\""
-COMMAND+=" -ex \"target remote localhost:1234\""
+COMMAND="gdb"
+COMMAND+=" ${LINUX}"
+COMMAND+=" -ex \"set logging file ${LOG_FILE}\""
+COMMAND+=" -ex \"set logging on\""
+COMMAND+=" -ex \"add-auto-load-safe-path ${LINUX_SCRIPT}\""
+COMMAND+=" -ex \"set directories ${LINUX_SOURCE}\""
+COMMAND+=" -ex \"target remote :1234\""
 COMMAND+=" -ex \"set disassemble-next-line on\""
-# COMMAND+=" -ex \"set architecture auto\""
-# COMMAND+=" -ex \"file ${XEN}\""
-# COMMAND+=" -ex \"set solib-search-path ${LIB_PATH}\""
-# COMMAND+=" -ex \"set directories ${XEN_SRC}\""
-# COMMAND+=" -ex \"add-symbol-file ${SYMBOLS_FILE} ${SYMBOLS_OFFSET}\""
-# COMMAND+=" -ex \"b *${BREAK_ADDR}\""
-# COMMAND+=" -ex \"b ${BREAK_NAME}\""
-# COMMAND+=" -ex \"b ${BREAK_FILE}:${BREAK_LINE}\""
-# COMMAND+=" -ex \"info breakpoints\""
-# COMMAND+=" -ex \"info files\""
-# COMMAND+=" -ex \"show directories\""
-# COMMAND+=" -ex \"show configuration\""
-COMMAND+=" ${XEN}"
+COMMAND+=" -ex \"lx-symbols\""
+COMMAND+=" -ex \"hb primary_entry\""
+COMMAND+=" -ex \"hb __primary_switch\""
+COMMAND+=" -ex \"hb __primary_switched\""
+COMMAND+=" -ex \"hb finalise_el2\""
+# COMMAND+=" -ex \"hb elx_sync\""
+# COMMAND+=" -ex \"hb __finalise_el2\""
+COMMAND+=" -ex \"hb start_kernel\""
+
+echo ${COMMAND} > ${COMMAND_FILE}
 
 execute "${COMMAND}"
+
+
+
+
+
+
+
+# COMMAND="gdb-multiarch"
+# # COMMAND+=" -q"
+# # COMMAND+=" --nh"
+# # COMMAND+=" -tui"
+# # COMMAND+=" -ex \"layout regs\""
+# COMMAND+=" -ex \"target remote localhost:1234\""
+# COMMAND+=" -ex \"set disassemble-next-line on\""
+# # COMMAND+=" -ex \"set architecture auto\""
+# # COMMAND+=" -ex \"file ${XEN}\""
+# # COMMAND+=" -ex \"set solib-search-path ${LIB_PATH}\""
+# # COMMAND+=" -ex \"set directories ${XEN_SRC}\""
+# # COMMAND+=" -ex \"add-symbol-file ${SYMBOLS_FILE} ${SYMBOLS_OFFSET}\""
+# # COMMAND+=" -ex \"b *${BREAK_ADDR}\""
+# # COMMAND+=" -ex \"b ${BREAK_NAME}\""
+# # COMMAND+=" -ex \"b ${BREAK_FILE}:${BREAK_LINE}\""
+# # COMMAND+=" -ex \"info breakpoints\""
+# # COMMAND+=" -ex \"info files\""
+# # COMMAND+=" -ex \"show directories\""
+# # COMMAND+=" -ex \"show configuration\""
+# COMMAND+=" ${XEN}"
+
+# execute "${COMMAND}"
