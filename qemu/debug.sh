@@ -38,6 +38,57 @@ LINUX=${LINUX_ROOT}/vmlinux
 LINUX_SOURCE=${LINUX_ROOT}
 LINUX_SCRIPT=${LINUX_ROOT}/scripts/gdb/vmlinux-gdb.py
 
+SBP_NAMED=(
+   # "FUNCTION_NAME"
+)
+
+HBP_NAMED=(
+   # "FUNCTION_NAME"
+
+   primary_entry
+   __primary_switch
+   __primary_switched
+   finalise_el2
+   # elx_sync
+   # __finalise_el2
+
+   start_kernel
+   boot_cpu_init
+   page_address_init
+   pr_notice
+   early_security_init
+   setup_arch
+   setup_boot_config
+   setup_command_line
+   setup_nr_cpu_ids
+   setup_per_cpu_areas
+   smp_prepare_boot_cpu
+   boot_cpu_hotplug_init
+   early_trace_init
+   init_timers
+   srcu_init
+   hrtimers_init
+   softirq_init
+   timekeeping_init
+   time_init
+)
+
+SBP_ADDR=(
+   # "0xABCDEF10"
+)
+
+HBP_ADDR=(
+   # "0xABCDEF10"
+)
+
+SBP_CODE=(
+   # "FILE:LINE"
+)
+
+HBP_CODE=(
+   # "FILE:LINE"
+)
+
 
 
 
@@ -49,6 +100,10 @@ LINUX_SCRIPT=${LINUX_ROOT}/scripts/gdb/vmlinux-gdb.py
 COMMAND="gdb-multiarch"
 COMMAND="gdb"
 COMMAND+=" ${LINUX}"
+# # COMMAND+=" -q"
+# # COMMAND+=" --nh"
+# # COMMAND+=" -tui"
+# # COMMAND+=" -ex \"layout regs\""
 COMMAND+=" -ex \"set logging file ${LOG_FILE}\""
 COMMAND+=" -ex \"set logging on\""
 COMMAND+=" -ex \"add-auto-load-safe-path ${LINUX_SCRIPT}\""
@@ -56,13 +111,24 @@ COMMAND+=" -ex \"set directories ${LINUX_SOURCE}\""
 COMMAND+=" -ex \"target remote :1234\""
 COMMAND+=" -ex \"set disassemble-next-line on\""
 COMMAND+=" -ex \"lx-symbols\""
-COMMAND+=" -ex \"hb primary_entry\""
-COMMAND+=" -ex \"hb __primary_switch\""
-COMMAND+=" -ex \"hb __primary_switched\""
-COMMAND+=" -ex \"hb finalise_el2\""
-# COMMAND+=" -ex \"hb elx_sync\""
-# COMMAND+=" -ex \"hb __finalise_el2\""
-COMMAND+=" -ex \"hb start_kernel\""
+for BP in "${SBP_NAMED[@]}"; do
+   COMMAND+=" -ex \"b ${BP}\""
+done
+for BP in "${HBP_NAMED[@]}"; do
+   COMMAND+=" -ex \"hb ${BP}\""
+done
+for BP in "${SBP_ADDR[@]}"; do
+   COMMAND+=" -ex \"b *${BP}\""
+done
+for BP in "${HBP_ADDR[@]}"; do
+   COMMAND+=" -ex \"hb *${BP}\""
+done
+for BP in "${SBP_CODE[@]}"; do
+   COMMAND+=" -ex \"b ${BP[0]}:${BP[1]}\""
+done
+for BP in "${HBP_CODE[@]}"; do
+   COMMAND+=" -ex \"hb ${BP[0]}:${BP[1]}\""
+done
 
 echo ${COMMAND} > ${COMMAND_FILE}
 
