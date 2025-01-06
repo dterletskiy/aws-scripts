@@ -53,24 +53,24 @@ HBP_NAMED=(
    # __finalise_el2
 
    start_kernel
-   boot_cpu_init
-   page_address_init
-   pr_notice
-   early_security_init
-   setup_arch
-   setup_boot_config
-   setup_command_line
-   setup_nr_cpu_ids
-   setup_per_cpu_areas
-   smp_prepare_boot_cpu
-   boot_cpu_hotplug_init
-   early_trace_init
-   init_timers
-   srcu_init
-   hrtimers_init
-   softirq_init
-   timekeeping_init
-   time_init
+   # boot_cpu_init
+   # page_address_init
+   # pr_notice
+   # early_security_init
+   # setup_arch
+   # setup_boot_config
+   # setup_command_line
+   # setup_nr_cpu_ids
+   # setup_per_cpu_areas
+   # smp_prepare_boot_cpu
+   # boot_cpu_hotplug_init
+   # early_trace_init
+   # init_timers
+   # srcu_init
+   # hrtimers_init
+   # softirq_init
+   # timekeeping_init
+   # time_init
 )
 
 SBP_ADDR=(
