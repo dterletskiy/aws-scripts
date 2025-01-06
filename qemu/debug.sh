@@ -83,6 +83,7 @@ HBP_ADDR=(
 
 SBP_CODE=(
    # "FILE:LINE"
+   # "init/main.c:1008"
 )
 
 HBP_CODE=(
