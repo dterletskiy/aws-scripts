@@ -11,7 +11,7 @@ clear
 
 
 
-KVMTOOL_DUMP_DIR=${DUMP_DIR}/kvmtool/${TIMESTAMP}/
+KVMTOOL_DUMP_DIR=$(dump_dir)/kvmtool/${TIMESTAMP}/
 mkdir -p ${KVMTOOL_DUMP_DIR}
 KVMTOOL_DT_DUMP_DIR=${KVMTOOL_DUMP_DIR}/dtb/
 mkdir -p ${KVMTOOL_DT_DUMP_DIR}
@@ -21,17 +21,17 @@ KVMTOOL_DTB_DUMP_RECOMPILE=${KVMTOOL_DT_DUMP_DIR}/recompiled.dtb
 
 DTB=/home/ubuntu/workspace/dump/kvmtool/original.dtb
 
-UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
+UBOOT=$(yocto_dir)/u-boot-generic-armv8-xt.bin
 
-XEN=${YOCTO_DIR}/xen-generic-armv8-xt
-XEN_CMD_LINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
+XEN=$(yocto_dir)/xen-generic-armv8-xt
+XEN_CMDLINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
-DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
-DOM0_KERNEL_CMD_LINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"
-DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
+DOM0_KERNEL=$(yocto_dir)/linux-dom0
+DOM0_KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen"
+DOM0_INITRD=$(yocto_dir)/rootfs.dom0.cpio.gz
 
-DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
-FULL_IMG=${YOCTO_DIR}/full_bench_efi.img
+DOMD_ROOTFS=$(yocto_dir)/rootfs.domd.ext4
+FULL_IMG=$(yocto_dir)/full_bench_efi.img
 
 
 
@@ -43,11 +43,11 @@ COMMAND+="sudo ${KVMTOOL_SOURCE_DIR}/lkvm run"
 # COMMAND+=" -f /home/ubuntu/workspace/edk2/edk2-stable202411/source/Build/ArmVirtQemu-AARCH64/DEBUG_GCC5/FV/QEMU_EFI.fd"
 
 COMMAND+=" -k ${DOM0_KERNEL}"
-COMMAND+=" -p \"${DOM0_KERNEL_CMD_LINE}\""
+COMMAND+=" -p \"${DOM0_KERNEL_CMDLINE}\""
 COMMAND+=" -i ${DOM0_INITRD}"
 
 COMMAND+=" -x ${XEN}"
-COMMAND+=" -y \"${XEN_CMD_LINE}\""
+COMMAND+=" -y \"${XEN_CMDLINE}\""
 
 COMMAND+=" -d ${FULL_IMG}"
 

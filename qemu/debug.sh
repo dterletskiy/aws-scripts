@@ -10,12 +10,14 @@
 
 
 
+# https://www.kernel.org/doc/html/v4.14/dev-tools/gdb-kernel-debugging.html
 objdump -S /home/ubuntu/workspace/kernel/torvalds/linux/vmlinux
 gdb /home/ubuntu/workspace/kernel/torvalds/linux/vmlinux \
    -ex "add-auto-load-safe-path /home/ubuntu/workspace/kernel/torvalds/linux/scripts/gdb/vmlinux-gdb.py" \
    -ex "set directories /home/ubuntu/workspace/kernel/torvalds/linux/" \
    -ex "target remote :1234" \
    -ex "set disassemble-next-line on" \
+   -ex "lx-symbols" \
    -ex "hb primary_entry" \
    -ex "hb __primary_switch" \
    -ex "hb __primary_switched" \
@@ -37,8 +39,8 @@ clear
 
 
 
-XEN=${YOCTO_DIR}/xen-syms
-XEN_SRC=${YOCTO_DIR}/xen/
+XEN=$(yocto_dir)/xen-syms
+XEN_SRC=$(yocto_dir)/xen/
 
 COMMAND="gdb-multiarch"
 # COMMAND+=" -q"

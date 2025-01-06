@@ -11,7 +11,9 @@ clear
 
 
 
-QEMU_DUMP_DIR=${DUMP_DIR}/qemu/${TIMESTAMP}/
+PERF_TOOL="/home/ubuntu/workspace/kernel/source/tools/perf/perf"
+
+QEMU_DUMP_DIR=$(dump_dir)/qemu/${TIMESTAMP}/
 mkdir -p ${QEMU_DUMP_DIR}
 
 COMMAND_FILE=${QEMU_DUMP_DIR}/command.txt
@@ -30,22 +32,22 @@ QEMU_ARM64=${QEMU_DIR}/bin/qemu-system-aarch64
 
 DTB=
 
-UBOOT=${YOCTO_DIR}/u-boot-generic-armv8-xt.bin
+UBOOT=$(yocto_dir)/u-boot-generic-armv8-xt.bin
 
-XEN=${YOCTO_DIR}/xen-generic-armv8-xt
+XEN=$(yocto_dir)/xen-generic-armv8-xt
 XEN_CMDLINE="dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"
 
-DOM0_KERNEL=${YOCTO_DIR}/linux-dom0
+DOM0_KERNEL=$(yocto_dir)/linux-dom0
 DOM0_KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen nokaslr"
-DOM0_INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
+DOM0_INITRD=$(yocto_dir)/rootfs.dom0.cpio.gz
 
-DOMD_ROOTFS=${YOCTO_DIR}/rootfs.domd.ext4
+DOMD_ROOTFS=$(yocto_dir)/rootfs.domd.ext4
 
-KERNEL=${YOCTO_DIR}/linux-dom0
+KERNEL=$(yocto_dir)/linux-dom0
 KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"
-INITRD=${YOCTO_DIR}/rootfs.dom0.cpio.gz
+INITRD=$(yocto_dir)/rootfs.dom0.cpio.gz
 
-FULL_IMAGE=${YOCTO_DIR}/full.img
+FULL_IMAGE=$(yocto_dir)/full.img
 
 
 
