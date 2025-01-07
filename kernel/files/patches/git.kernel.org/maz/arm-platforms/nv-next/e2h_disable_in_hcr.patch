@@ -1,0 +1,15 @@
+diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
+index ff4bf85c3..362de53a8 100644
+--- a/arch/arm64/kvm/nested.c
++++ b/arch/arm64/kvm/nested.c
+@@ -1044,8 +1044,10 @@ int kvm_init_nv_sysregs(struct kvm *kvm)
+ 		res0 |= HCR_TLOR;
+ 	if (!kvm_has_feat(kvm, ID_AA64MMFR1_EL1, VH, IMP))
+ 		res0 |= HCR_E2H;
++// @TDA: BEGIN. Comment next 2 lines to run xen in qemu
+ 	if (!kvm_has_feat(kvm, ID_AA64MMFR4_EL1, E2H0, IMP))
+ 		res1 |= HCR_E2H;
++// @TDA: END.
+ 	set_sysreg_masks(kvm, HCR_EL2, res0, res1);
+ 
+ 	/* HCRX_EL2 */
