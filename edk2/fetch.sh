@@ -10,3 +10,6 @@ git clone \
    --branch ${EDK2_BRANCH} \
    ${EDK2_REMOTE} \
    ${EDK2_SOURCE_DIR}
+
+cd ${EDK2_SOURCE_DIR}
+git submodule update --init
