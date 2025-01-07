@@ -264,12 +264,16 @@ function build_params_kvm_virt( )
    Q_APPEND=" -append \"${KERNEL_CMDLINE}\""
    Q_INITRD=" -initrd ${INITRD}"
 
+   Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
+   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
+
    COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
    COMMAND+=" ${Q_CPU}"
    COMMAND+=" ${Q_KERNEL}"
    COMMAND+=" ${Q_APPEND}"
    COMMAND+=" ${Q_INITRD}"
+   COMMAND+=" ${Q_DRIVE_DOMD_ROOTFS}"
 
    echo "${COMMAND}"
 }
