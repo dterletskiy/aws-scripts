@@ -11,6 +11,7 @@
 
 
 # https://www.kernel.org/doc/html/v4.14/dev-tools/gdb-kernel-debugging.html
+# https://www.kernel.org/doc/html/latest/dev-tools/gdb-kernel-debugging.html
 
 
 
