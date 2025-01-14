@@ -5,4 +5,4 @@ source ${SCRIPT_DIR}/common.sh
 
 # cd ${KERNEL_SOURCE_DIR}
 
-make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} V=1 -j48
+make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} V=1 -j96

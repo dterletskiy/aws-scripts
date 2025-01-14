@@ -4,4 +4,4 @@ readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pw
 source ${SCRIPT_DIR}/common.sh
 
 cd ${KVMTOOL_SOURCE_DIR}
-make V=1 -j48
+make V=1 -j96

@@ -8,6 +8,7 @@ cd ${KERNEL_BUILD_DIR}
 
 cp -v /boot/config-$(uname -r) ${KERNEL_BUILD_DIR}/.config
 # make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} localmodconfig
+# make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} oldconfig
 make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} menuconfig
 
 ${KERNEL_SOURCE_DIR}/scripts/config --state SYSTEM_TRUSTED_KEYS
