@@ -3,5 +3,10 @@
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
-cd ${QEMU_BUILD_DIR}
-make install DESTDIR=${QEMU_DEPLOY_DIR}
+execute " \
+   cd ${QEMU_BUILD_DIR} \
+"
+
+execute " \
+   make install DESTDIR=${QEMU_DEPLOY_DIR} \
+"
