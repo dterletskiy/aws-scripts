@@ -9,7 +9,7 @@ readonly TIMESTAMP=$(date +'%Y.%m.%d_%H.%M.%S')
 
 BACKUP_DIR=$(backup_dir)/boot/${TIMESTAMP}/
 execute " \
-   mkdir ${BACKUP_DIR} && \
+   mkdir -p ${BACKUP_DIR} && \
    sudo mv initrd.img* ${BACKUP_DIR} && \
    sudo mv config-* ${BACKUP_DIR} && \
    sudo mv System.map* ${BACKUP_DIR} && \
