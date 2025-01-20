@@ -16,15 +16,15 @@ execute " \
    sudo mv /boot/vmlinuz* ${BACKUP_DIR} \
 "
 
-# execute " \
-#    sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} modules_install \
-# "
-# execute " \
-#    sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} install \
-# "
-# execute " \
-#    sudo update-initramfs -c -k 6.0.7 \
-# "
-# execute " \
-#    sudo update-grub \
-# "
+execute " \
+   sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} modules_install \
+"
+execute " \
+   sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} install \
+"
+execute " \
+   sudo update-initramfs -c -k 6.0.7 \
+"
+execute " \
+   sudo update-grub \
+"
