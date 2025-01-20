@@ -45,6 +45,11 @@ function dump_dir( )
    echo "$(root_dir)/dump/"
 }
 
+function backup_dir( )
+{
+   echo "$(root_dir)/backup/"
+}
+
 EXECUTE_STATUS=0
 
 function execute( )

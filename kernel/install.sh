@@ -3,17 +3,28 @@
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/common.sh
 
+readonly TIMESTAMP=$(date +'%Y.%m.%d_%H.%M.%S')
+
 # cd ${KERNEL_SOURCE_DIR}
 
+BACKUP_DIR=$(backup_dir)/boot/${TIMESTAMP}/
 execute " \
-   sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} modules_install \
+   mkdir ${BACKUP_DIR} && \
+   sudo mv initrd.img* ${BACKUP_DIR} && \
+   sudo mv config-* ${BACKUP_DIR} && \
+   sudo mv System.map* ${BACKUP_DIR} && \
+   sudo mv vmlinuz* ${BACKUP_DIR} \
 "
-execute " \
-   sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} install \
-"
-execute " \
-   sudo update-initramfs -c -k 6.0.7 \
-"
-execute " \
-   sudo update-grub \
-"
+
+# execute " \
+#    sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} modules_install \
+# "
+# execute " \
+#    sudo make O=${KERNEL_BUILD_DIR} -C ${KERNEL_SOURCE_DIR} install \
+# "
+# execute " \
+#    sudo update-initramfs -c -k 6.0.7 \
+# "
+# execute " \
+#    sudo update-grub \
+# "
