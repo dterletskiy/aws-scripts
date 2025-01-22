@@ -1,0 +1,60 @@
+kernel - nok - 43.676s.
+/home/ubuntu/workspace//qemu/v9.2.0-nv-1//deploy//usr/local//bin/qemu-system-aarch64 \
+	-machine virt,acpi=off,secure=off,iommu=smmuv3,gic-version=max  \
+	-cpu max  \
+	-kernel /home/ubuntu/workspace//yocto//linux-dom0  \
+	-append "root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"  \
+	-initrd /home/ubuntu/workspace//yocto//rootfs.dom0.cpio.gz   \
+	-m 8G  -nodefaults -no-reboot  -serial mon:stdio  -nographic
+
+
+
+kvm,kernel - ok - 772ms.
+/home/ubuntu/workspace//qemu/v9.2.0-nv-1//deploy//usr/local//bin/qemu-system-aarch64 \
+	-machine virt,acpi=off,secure=off,accel=kvm,iommu=smmuv3,gic-version=max  \
+	-cpu max  \
+	-kernel /home/ubuntu/workspace//yocto//linux-dom0  \
+	-append "root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"  \
+	-initrd /home/ubuntu/workspace//yocto//rootfs.dom0.cpio.gz   \
+	-m 8G  -nodefaults -no-reboot  -serial mon:stdio  -nographic
+
+
+
+virtualization,kvm,kernel - ok - 832ms.
+/home/ubuntu/workspace//qemu/v9.2.0-nv-1//deploy//usr/local//bin/qemu-system-aarch64 \
+	-machine virt,acpi=off,secure=off,accel=kvm,virtualization=on,iommu=smmuv3,gic-version=max  \
+	-cpu max  \
+	-kernel /home/ubuntu/workspace//yocto//linux-dom0  \
+	-append "root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"  \
+	-initrd /home/ubuntu/workspace//yocto//rootfs.dom0.cpio.gz  \
+	-drive if=none,index=1,id=rootfs_domd,file=/home/ubuntu/workspace//yocto//rootfs.domd.ext4 \
+	-device virtio-blk-device,drive=rootfs_domd   \
+	-m 8G  -nodefaults -no-reboot  -serial mon:stdio  -nographic
+
+
+
+virtualization,xen - nok - 9.681s.
+/home/ubuntu/workspace//qemu/v9.2.0-nv-1//deploy//usr/local//bin/qemu-system-aarch64 \
+	-machine virt,acpi=off,secure=off,virtualization=on,iommu=smmuv3,gic-version=max  \
+	-cpu max,sme=off  \
+	-kernel /home/ubuntu/workspace//yocto//xen-generic-armv8-xt  \
+	-append "dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"        \
+	-device guest-loader,addr=0x60000000,kernel=/home/ubuntu/workspace//yocto//linux-dom0,bootargs="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen nokaslr"            \
+	-device guest-loader,addr=0x52000000,initrd=/home/ubuntu/workspace//yocto//rootfs.dom0.cpio.gz      \
+	-drive if=none,index=1,id=rootfs_domd,file=/home/ubuntu/workspace//yocto//rootfs.domd.ext4 \
+	-device virtio-blk-device,drive=rootfs_domd   \
+	-m 8G  -nodefaults -no-reboot  -serial mon:stdio  -nographic
+
+
+
+virtualization,kvm,xen - nok - fail
+/home/ubuntu/workspace//qemu/v9.2.0-nv-1//deploy//usr/local//bin/qemu-system-aarch64 \
+	-machine virt,acpi=off,secure=off,accel=kvm,virtualization=on,iommu=smmuv3,gic-version=max  \
+	-cpu max  \
+	-kernel /home/ubuntu/workspace//yocto//xen-generic-armv8-xt  \
+	-append "dom0_mem=3G,max:3G loglvl=all guest_loglvl=all console=dtuart"        \
+	-device guest-loader,addr=0x60000000,kernel=/home/ubuntu/workspace//yocto//linux-dom0,bootargs="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=xen nokaslr"            \
+	-device guest-loader,addr=0x52000000,initrd=/home/ubuntu/workspace//yocto//rootfs.dom0.cpio.gz      \
+	-drive if=none,index=1,id=rootfs_domd,file=/home/ubuntu/workspace//yocto//rootfs.domd.ext4 \
+	-device virtio-blk-device,drive=rootfs_domd   \
+	-m 8G  -nodefaults -no-reboot  -serial mon:stdio  -nographic

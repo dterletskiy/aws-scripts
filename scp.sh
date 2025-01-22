@@ -1,6 +1,6 @@
 KEY="/home/dmytro_terletskyi/.tda/aws/epam/c8g.metal-24xl-2024.11.19.pem"
 REMOTE_USER=ubuntu
-REMOTE_IP=35.87.233.53
+REMOTE_IP=35.94.162.236
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
 REMOTE_DIR="/home/ubuntu/workspace/yocto/"
 REMOTE_PATH=${REMOTE}:${REMOTE_DIR}
@@ -37,3 +37,4 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 
 scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/dump/ /home/dmytro_terletskyi/Downloads/aws/dump/
 scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/kernel/torvalds/linux/vmlinux.objdump /home/dmytro_terletskyi/Downloads/aws/dump/
+scp -i ${KEY} -r ${REMOTE}:/home/ubuntu/workspace/yocto/xen-generic-armv8-xt-syms.objdump /home/dmytro_terletskyi/Downloads/aws/dump/
