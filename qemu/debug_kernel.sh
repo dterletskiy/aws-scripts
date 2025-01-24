@@ -84,7 +84,7 @@ HBP_CODE=(
 
 
 
-# objdump -S ${LINUX}
+objdump -S ${LINUX} > ${DUMP_DIR}/$(basename ${LINUX}).objdump
 
 COMMAND="gdb-multiarch"
 COMMAND="gdb"

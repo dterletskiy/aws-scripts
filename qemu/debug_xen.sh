@@ -26,7 +26,7 @@ mkdir -p ${DUMP_DIR}
 COMMAND_FILE=${DUMP_DIR}/command.txt
 LOG_FILE=${DUMP_DIR}/log.txt
 
-XEN=$(yocto_dir)/xen-syms
+XEN=$(yocto_dir)/xen-generic-armv8-xt-syms
 XEN_SRC=$(yocto_dir)/xen/
 
 SBP_NAMED=(
@@ -59,7 +59,7 @@ HBP_CODE=(
 
 
 
-# objdump -S ${XEN}
+objdump -S ${XEN} > ${DUMP_DIR}/$(basename ${XEN}).objdump
 
 COMMAND="gdb-multiarch"
 COMMAND="gdb"
