@@ -59,7 +59,8 @@ HBP_CODE=(
 
 
 
-objdump -S ${XEN} > ${DUMP_DIR}/$(basename ${XEN}).objdump
+COMMAND="objdump -S ${XEN} > ${DUMP_DIR}/$(basename ${XEN}).objdump"
+execute "${COMMAND}"
 
 COMMAND="gdb-multiarch"
 COMMAND="gdb"
