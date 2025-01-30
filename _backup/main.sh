@@ -8,7 +8,6 @@ source ${SCRIPT_DIR_COMMON}/../common.sh
 
 
 readonly OPTION_DELIMITER=","
-# IFS=","
 
 readonly PARAMETER_REQUIRED="REQUIRED"
 readonly PARAMETER_OPTIONAL="OPTIONAL"
@@ -23,7 +22,7 @@ declare -a CMD_PARAMETERS=( )
 
 
 
-function split_string_add_to_array( )
+function __split_string_add_to_array__( )
 {
    local LOCAL_STRING=${1}
    local LOCAL_DELIMITER=${2}
@@ -33,23 +32,29 @@ function split_string_add_to_array( )
    LOCAL_ARRAY+=("${__ARRAY__[@]}")
 }
 
-function print_parameters_help( )
+function __print_parameters_help__( )
 {
    for _PARAMETER_ in "${CMD_PARAMETERS[@]}"; do
       local PARAMETER=${_PARAMETER_^^}
       local _NAME_="CMD_${PARAMETER}_NAME"
       local _TYPE_="CMD_${PARAMETER}_TYPE"
 
+      IFS=","
+
       local STRING="--${!_NAME_}:"$'\n'
       STRING+="   type: '${!_TYPE_}'"$'\n'
       if [ ${!_TYPE_} == ${PARAMETER_TYPE_ARGUMENT} ]; then
          local _ALLOWED_VALUES_="CMD_${PARAMETER}_ALLOWED_VALUES"
+         local _DEFAULT_VALUES_="CMD_${PARAMETER}_DEFAULT_VALUES"
          local _REQUIRED_="CMD_${PARAMETER}_REQUIRED"
 
          STRING+="   required: '${!_REQUIRED_}'"$'\n'
 
-         declare -n __ARRAY__=${_ALLOWED_VALUES_}
-         STRING+="   allowed values: '${__ARRAY__[*]}'"$'\n'
+         declare -n __ALLOWED_ARRAY__=${_ALLOWED_VALUES_}
+         STRING+="   allowed values: '${__ALLOWED_ARRAY__[*]}' (${#__ALLOWED_ARRAY__[@]})"$'\n'
+
+         declare -n __DEFAULT_ARRAY__=${_DEFAULT_VALUES_}
+         STRING+="   default values: '${__DEFAULT_ARRAY__[*]}' (${#__DEFAULT_ARRAY__[@]})"$'\n'
       elif [ ${!_TYPE_} == ${PARAMETER_TYPE_OPTION} ]; then
          local _DEFINED_="CMD_${PARAMETER}_DEFINED"
 
@@ -62,7 +67,46 @@ function print_parameters_help( )
    done
 }
 
-function validate_argument( )
+function __print_parameters_info__( )
+{
+   for _PARAMETER_ in "${CMD_PARAMETERS[@]}"; do
+      local PARAMETER=${_PARAMETER_^^}
+      local _NAME_="CMD_${PARAMETER}_NAME"
+      local _TYPE_="CMD_${PARAMETER}_TYPE"
+
+      IFS=","
+
+      local STRING="--${!_NAME_}:"$'\n'
+      STRING+="   type: '${!_TYPE_}'"$'\n'
+      if [ ${!_TYPE_} == ${PARAMETER_TYPE_ARGUMENT} ]; then
+         local _ALLOWED_VALUES_="CMD_${PARAMETER}_ALLOWED_VALUES"
+         local _DEFAULT_VALUES_="CMD_${PARAMETER}_DEFAULT_VALUES"
+         local _DEFINED_VALUES_="CMD_${PARAMETER}_VALUES"
+         local _REQUIRED_="CMD_${PARAMETER}_REQUIRED"
+
+         STRING+="   required: '${!_REQUIRED_}'"$'\n'
+
+         declare -n __ALLOWED_ARRAY__=${_ALLOWED_VALUES_}
+         STRING+="   allowed values: '${__ALLOWED_ARRAY__[*]}' (${#__ALLOWED_ARRAY__[@]})"$'\n'
+
+         declare -n __DEFAULT_ARRAY__=${_DEFAULT_VALUES_}
+         STRING+="   default values: '${__DEFAULT_ARRAY__[*]}' (${#__DEFAULT_ARRAY__[@]})"$'\n'
+
+         declare -n __DEFINED_ARRAY__=${_DEFINED_VALUES_}
+         STRING+="   defined values: '${__DEFINED_ARRAY__[*]}' (${#__DEFINED_ARRAY__[@]})"$'\n'
+      elif [ ${!_TYPE_} == ${PARAMETER_TYPE_OPTION} ]; then
+         local _DEFINED_="CMD_${PARAMETER}_DEFINED"
+
+         STRING+="   defined: '${!_DEFINED_}'"$'\n'
+      else
+         print_error "undefined parameter type: '${PARAMETER}'"
+         exit 1
+      fi
+      print_info ${STRING}
+   done
+}
+
+function __validate_argument__( )
 {
    local LOCAL_PARAMETER_NAME=${1}
    declare -n LOCAL_PARAMETER_VALUES=${2}
@@ -70,13 +114,18 @@ function validate_argument( )
    local LOCAL_PARAMETER_CRITICAL=${4}
 
    if [[ 0 -eq ${#LOCAL_PARAMETER_VALUES[@]} ]]; then
-      if [[ ${PARAMETER_REQUIRED} -eq ${LOCAL_PARAMETER_CRITICAL} ]]; then
+      if [[ "${PARAMETER_REQUIRED}" == "${LOCAL_PARAMETER_CRITICAL}" ]]; then
          print_error "'${LOCAL_PARAMETER_NAME}' is not defined but it is required"
          exit 1
       fi
    else
       for ITEM in "${LOCAL_PARAMETER_VALUES[@]}"; do
-         if [[ ! "${LOCAL_PARAMETER_VALUES_ALLOWED[@]}" =~ "${ITEM}" ]]; then
+         # print_info "Processing value: '${ITEM}'"
+         if [[ 0 -eq ${#LOCAL_PARAMETER_VALUES_ALLOWED[@]} ]]; then
+            # print_ok "'${LOCAL_PARAMETER_NAME}' can has any value"
+            :
+         # elif [[ ! "${LOCAL_PARAMETER_VALUES_ALLOWED[@]}" =~ "${ITEM}" ]]; then
+         elif [[ ! " ${LOCAL_PARAMETER_VALUES_ALLOWED[@]} " == *" ${ITEM} "* ]]; then
             print_error "'${LOCAL_PARAMETER_NAME}' is defined but invalid: '${ITEM}'"
             exit 1
          else
@@ -87,7 +136,7 @@ function validate_argument( )
    fi
 }
 
-function validate_option( )
+function __validate_option__( )
 {
    local LOCAL_OPTION_NAME=${1}
    local LOCAL_OPTION_DEFINED=${2}
@@ -101,21 +150,22 @@ function validate_option( )
    fi
 }
 
-function validate_parameters( )
+function __validate_parameters__( )
 {
    for _PARAMETER_ in "${CMD_PARAMETERS[@]}"; do
       local PARAMETER=${_PARAMETER_^^}
       local _NAME_="CMD_${PARAMETER}_NAME"
       local _TYPE_="CMD_${PARAMETER}_TYPE"
 
+      # print_info "Validating parameter: '${PARAMETER}'"
       if [ ${!_TYPE_} == ${PARAMETER_TYPE_ARGUMENT} ]; then
          local _VALUES_="CMD_${PARAMETER}_VALUES"
          local _ALLOWED_VALUES_="CMD_${PARAMETER}_ALLOWED_VALUES"
          local _REQUIRED_="CMD_${PARAMETER}_REQUIRED"
-         validate_argument ${!_NAME_} ${_VALUES_} ${_ALLOWED_VALUES_} ${!_REQUIRED_}
+         __validate_argument__ ${!_NAME_} ${_VALUES_} ${_ALLOWED_VALUES_} ${!_REQUIRED_}
       elif [ ${!_TYPE_} == ${PARAMETER_TYPE_OPTION} ]; then
          local _DEFINED_="CMD_${PARAMETER}_DEFINED"
-         validate_option ${!_NAME_} ${!_DEFINED_}
+         __validate_option__ ${!_NAME_} ${!_DEFINED_}
       else
          print_error "undefined parameter type: '${PARAMETER}'"
          exit 1
@@ -127,7 +177,7 @@ function parse_arguments( )
 {
    for option in "$@"; do
       if [[ ${option} == --help ]]; then
-         print_parameters_help
+         __print_parameters_help__
          exit 0
       fi
 
@@ -145,14 +195,13 @@ function parse_arguments( )
                   print_error "'--${!_NAME_}' is defined but has no value"
                   exit 1
                fi
-               split_string_add_to_array "${__TEMP__}" ${OPTION_DELIMITER} ${_VALUES_}
+               __split_string_add_to_array__ "${__TEMP__}" ${OPTION_DELIMITER} ${_VALUES_}
                OPTION_PROCESSED=1
                break
             fi
          elif [ ${!_TYPE_} == ${PARAMETER_TYPE_OPTION} ]; then
             if [[ ${option} == --${!_NAME_} ]]; then
-               local _DEFINED_="CMD_${PARAMETER}_DEFINED"
-               declare "${!_DEFINED_}=${OPTION_DEFINED}"
+               declare "CMD_${PARAMETER}_DEFINED=${OPTION_DEFINED}"
                OPTION_PROCESSED=1
                break
             fi
@@ -165,62 +214,14 @@ function parse_arguments( )
       fi
    done
 
-   validate_parameters
+   __validate_parameters__
+
+   __print_parameters_info__
 }
 
 
 
-function define_argument( )
-{
-   local LOCAL_NAME=${1}
-   local LOCAL_TYPE=${2}
-   local LOCAL_REQUIRED=${3}
-   # declare -n LOCAL_PARAMETER_VALUES_ALLOWED=${4}
-   declare -a LOCAL_PARAMETER_VALUES_ALLOWED=(${4})
-   # declare -n LOCAL_PARAMETER_VALUES_DEFAULT=${5}
-   declare -a LOCAL_PARAMETER_VALUES_DEFAULT=(${5})
-
-   local LOCAL_NAME_UP="${LOCAL_NAME^^}"
-
-   eval "readonly CMD_${LOCAL_NAME_UP}_NAME=\"${LOCAL_NAME}\""
-   eval "readonly CMD_${LOCAL_NAME_UP}_TYPE=${PARAMETER_TYPE_ARGUMENT}"
-   eval "readonly CMD_${LOCAL_NAME_UP}_REQUIRED=${PARAMETER_REQUIRED}"
-   eval "declare -g CMD_${LOCAL_NAME_UP}_ALLOWED_VALUES=(\"${LOCAL_PARAMETER_VALUES_ALLOWED[@]}\")"
-   eval "declare -g CMD_${LOCAL_NAME_UP}_DEFAULT_VALUES=(\"${LOCAL_PARAMETER_VALUES_DEFAULT[@]}\")"
-   eval "declare -g CMD_${LOCAL_NAME_UP}_VALUES=( )"
-}
-
-function define_option( )
-{
-   local LOCAL_NAME=${1}
-   local LOCAL_TYPE=${2}
-
-   local LOCAL_NAME_UP="${LOCAL_NAME^^}"
-
-   eval "readonly CMD_${LOCAL_NAME_UP}_NAME=\"${LOCAL_NAME}\""
-   eval "readonly CMD_${LOCAL_NAME_UP}_TYPE=${PARAMETER_TYPE_OPTION}"
-   eval "readonly CMD_${LOCAL_NAME_UP}_DEFINED=${OPTION_NOT_DEFINED}"
-}
-
-function define_parameter( )
-{
-   local LOCAL_NAME=${1}
-   local LOCAL_TYPE=${2}
-
-   if [ ${LOCAL_TYPE} == ${PARAMETER_TYPE_ARGUMENT} ]; then
-      define_argument "$@"
-   elif [ ${LOCAL_TYPE} == ${PARAMETER_TYPE_OPTION} ]; then
-      define_option "$@"
-   else
-      print_error "undefined parameter type: '${LOCAL_NAME}'"
-      exit 1
-   fi
-
-   CMD_PARAMETERS+=( "${LOCAL_NAME}" )
-   test_defined_parameter ${LOCAL_NAME}
-}
-
-function test_defined_parameter( )
+function __test_defined_parameter__( )
 {
    local LOCAL_NAME=${1}
    local LOCAL_NAME_UP="${LOCAL_NAME^^}"
@@ -250,6 +251,11 @@ function test_defined_parameter( )
          print_error "'${_ALLOWED_VALUES_}' is not defined 3"
       fi
 
+      local _DEFAULT_VALUES_="CMD_${LOCAL_NAME_UP}_DEFAULT_VALUES"
+      if ! declare -p ${_DEFAULT_VALUES_} 2>/dev/null | grep -q 'declare -a'; then
+         print_error "'${_DEFAULT_VALUES_}' is not defined 3"
+      fi
+
       local _VALUES_="CMD_${LOCAL_NAME_UP}_VALUES"
       if ! declare -p ${_VALUES_} 2>/dev/null | grep -q 'declare -a'; then
          print_error "'${_VALUES_}' is not defined 3"
@@ -264,4 +270,81 @@ function test_defined_parameter( )
       print_error "undefined parameter type: '${!_NAME_}'"
       exit 1
    fi
+}
+
+function __define_argument__( )
+{
+   local LOCAL_NAME=${1}
+   local LOCAL_TYPE=${2}
+   local LOCAL_REQUIRED=${3}
+   # declare -n LOCAL_PARAMETER_VALUES_ALLOWED=${4}
+   declare -a LOCAL_PARAMETER_VALUES_ALLOWED=(${4})
+   # declare -n LOCAL_PARAMETER_VALUES_DEFAULT=${5}
+   declare -a LOCAL_PARAMETER_VALUES_DEFAULT=(${5})
+
+   local LOCAL_NAME_UP="${LOCAL_NAME^^}"
+
+   declare -g "CMD_${LOCAL_NAME_UP}_NAME=${LOCAL_NAME}"
+   declare -g "CMD_${LOCAL_NAME_UP}_TYPE=${PARAMETER_TYPE_ARGUMENT}"
+   declare -g "CMD_${LOCAL_NAME_UP}_REQUIRED=${LOCAL_REQUIRED}"
+   declare -ag "CMD_${LOCAL_NAME_UP}_ALLOWED_VALUES=(\"\${LOCAL_PARAMETER_VALUES_ALLOWED[@]}\")"
+   declare -ag "CMD_${LOCAL_NAME_UP}_DEFAULT_VALUES=(\"\${LOCAL_PARAMETER_VALUES_DEFAULT[@]}\")"
+   declare -ag "CMD_${LOCAL_NAME_UP}_VALUES=( )"
+}
+
+function __define_option__( )
+{
+   local LOCAL_NAME=${1}
+   local LOCAL_TYPE=${2}
+
+   local LOCAL_NAME_UP="${LOCAL_NAME^^}"
+
+   eval "readonly CMD_${LOCAL_NAME_UP}_NAME=\"${LOCAL_NAME}\""
+   eval "readonly CMD_${LOCAL_NAME_UP}_TYPE=${PARAMETER_TYPE_OPTION}"
+   eval "CMD_${LOCAL_NAME_UP}_DEFINED=${OPTION_NOT_DEFINED}"
+}
+
+function define_parameter( )
+{
+   local LOCAL_NAME=${1}
+   local LOCAL_TYPE=${2}
+
+   if [ ${LOCAL_TYPE} == ${PARAMETER_TYPE_ARGUMENT} ]; then
+      __define_argument__ "$@"
+   elif [ ${LOCAL_TYPE} == ${PARAMETER_TYPE_OPTION} ]; then
+      __define_option__ "$@"
+   else
+      print_error "undefined parameter type: '${LOCAL_NAME}'"
+      exit 1
+   fi
+
+   CMD_PARAMETERS+=( "${LOCAL_NAME}" )
+   __test_defined_parameter__ ${LOCAL_NAME}
+}
+
+function define_required_argument( )
+{
+   local LOCAL_NAME="${1}"
+   local LOCAL_ALLOWED_VALUES="${2}"
+   local LOCAL_DEFAULT_VALUES="${3}"
+
+   define_parameter "${LOCAL_NAME}" "${PARAMETER_TYPE_ARGUMENT}" "${PARAMETER_REQUIRED}" \
+      "${LOCAL_ALLOWED_VALUES}" "${LOCAL_DEFAULT_VALUES}"
+}
+
+function define_optional_argument( )
+{
+   local LOCAL_NAME="${1}"
+   local LOCAL_ALLOWED_VALUES="${2}"
+   local LOCAL_DEFAULT_VALUES="${3}"
+
+   define_parameter "${LOCAL_NAME}" "${PARAMETER_TYPE_ARGUMENT}" "${PARAMETER_OPTIONAL}" \
+      "${LOCAL_ALLOWED_VALUES}" "${LOCAL_DEFAULT_VALUES}"
+}
+
+function define_option( )
+{
+   local LOCAL_NAME="${1}"
+
+   define_parameter "${LOCAL_NAME}" "${PARAMETER_TYPE_OPTION}"
 }
