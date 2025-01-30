@@ -15,6 +15,11 @@
 
 readonly COMMON_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+readonly TIMESTAMP=$(date +'%Y.%m.%d_%H.%M.%S')
+readonly DELIMITER="---------------------------------------------------------------------------------------------------"
+
+
+
 readonly SHELL_FW=${COMMON_SCRIPT_DIR}/submodules/dterletskiy/shell_fw/
 source ${SHELL_FW}/constants/console.sh
 source ${SHELL_FW}/constants/constants.sh
@@ -22,10 +27,6 @@ source ${SHELL_FW}/base.sh
 source ${SHELL_FW}/print.sh
 source ${SHELL_FW}/ui.sh
 source ${SHELL_FW}/drive.sh
-
-
-
-readonly DELIMITER="---------------------------------------------------------------------------------------------------"
 
 
 
@@ -52,24 +53,6 @@ function dump_dir( )
 function backup_dir( )
 {
    echo "$(root_dir)/backup/"
-}
-
-EXECUTE_STATUS=0
-
-function execute( )
-{
-	local COMMAND="${@}"
-   echo "${COMMAND}"
-   eval "${COMMAND}"
-   EXECUTE_STATUS=$?
-
-   if [ $? -eq 0 ]; then
-      print_ok "${COMMAND}"
-   else
-      print_error "${COMMAND}"
-   fi
-
-   echo ${EXECUTE_STATUS}
 }
 
 function compile_dt( )

@@ -81,7 +81,7 @@ function __print_parameters_info__( )
       if [ ${!_TYPE_} == ${PARAMETER_TYPE_ARGUMENT} ]; then
          local _ALLOWED_VALUES_="CMD_${PARAMETER}_ALLOWED_VALUES"
          local _DEFAULT_VALUES_="CMD_${PARAMETER}_DEFAULT_VALUES"
-         local _DEFINED_VALUES_="CMD_${PARAMETER}_VALUES"
+         local _DEFINED_VALUES_="CMD_${PARAMETER}_DEFINED_VALUES"
          local _REQUIRED_="CMD_${PARAMETER}_REQUIRED"
 
          STRING+="   required: '${!_REQUIRED_}'"$'\n'
@@ -109,23 +109,23 @@ function __print_parameters_info__( )
 function __validate_argument__( )
 {
    local LOCAL_PARAMETER_NAME=${1}
-   declare -n LOCAL_PARAMETER_VALUES=${2}
-   declare -n LOCAL_PARAMETER_VALUES_ALLOWED=${3}
+   declare -n LOCAL_PARAMETER_DEFINED_VALUES=${2}
+   declare -n LOCAL_PARAMETER_ALLOWED_VALUES=${3}
    local LOCAL_PARAMETER_CRITICAL=${4}
 
-   if [[ 0 -eq ${#LOCAL_PARAMETER_VALUES[@]} ]]; then
+   if [[ 0 -eq ${#LOCAL_PARAMETER_DEFINED_VALUES[@]} ]]; then
       if [[ "${PARAMETER_REQUIRED}" == "${LOCAL_PARAMETER_CRITICAL}" ]]; then
          print_error "'${LOCAL_PARAMETER_NAME}' is not defined but it is required"
          exit 1
       fi
    else
-      for ITEM in "${LOCAL_PARAMETER_VALUES[@]}"; do
+      for ITEM in "${LOCAL_PARAMETER_DEFINED_VALUES[@]}"; do
          # print_info "Processing value: '${ITEM}'"
-         if [[ 0 -eq ${#LOCAL_PARAMETER_VALUES_ALLOWED[@]} ]]; then
+         if [[ 0 -eq ${#LOCAL_PARAMETER_ALLOWED_VALUES[@]} ]]; then
             # print_ok "'${LOCAL_PARAMETER_NAME}' can has any value"
             :
-         # elif [[ ! "${LOCAL_PARAMETER_VALUES_ALLOWED[@]}" =~ "${ITEM}" ]]; then
-         elif [[ ! " ${LOCAL_PARAMETER_VALUES_ALLOWED[@]} " == *" ${ITEM} "* ]]; then
+         # elif [[ ! "${LOCAL_PARAMETER_ALLOWED_VALUES[@]}" =~ "${ITEM}" ]]; then
+         elif [[ ! " ${LOCAL_PARAMETER_ALLOWED_VALUES[@]} " == *" ${ITEM} "* ]]; then
             print_error "'${LOCAL_PARAMETER_NAME}' is defined but invalid: '${ITEM}'"
             exit 1
          else
@@ -159,10 +159,10 @@ function __validate_parameters__( )
 
       # print_info "Validating parameter: '${PARAMETER}'"
       if [ ${!_TYPE_} == ${PARAMETER_TYPE_ARGUMENT} ]; then
-         local _VALUES_="CMD_${PARAMETER}_VALUES"
+         local _DEFINED_VALUES_="CMD_${PARAMETER}_DEFINED_VALUES"
          local _ALLOWED_VALUES_="CMD_${PARAMETER}_ALLOWED_VALUES"
          local _REQUIRED_="CMD_${PARAMETER}_REQUIRED"
-         __validate_argument__ ${!_NAME_} ${_VALUES_} ${_ALLOWED_VALUES_} ${!_REQUIRED_}
+         __validate_argument__ ${!_NAME_} ${_DEFINED_VALUES_} ${_ALLOWED_VALUES_} ${!_REQUIRED_}
       elif [ ${!_TYPE_} == ${PARAMETER_TYPE_OPTION} ]; then
          local _DEFINED_="CMD_${PARAMETER}_DEFINED"
          __validate_option__ ${!_NAME_} ${!_DEFINED_}
@@ -186,7 +186,7 @@ function parse_arguments( )
          local PARAMETER=${_PARAMETER_^^}
          local _NAME_="CMD_${PARAMETER}_NAME"
          local _TYPE_="CMD_${PARAMETER}_TYPE"
-         local _VALUES_="CMD_${PARAMETER}_VALUES"
+         local _DEFINED_VALUES_="CMD_${PARAMETER}_DEFINED_VALUES"
 
          if [ ${!_TYPE_} == ${PARAMETER_TYPE_ARGUMENT} ]; then
             if [[ ${option} == --${!_NAME_}=* ]]; then
@@ -195,7 +195,7 @@ function parse_arguments( )
                   print_error "'--${!_NAME_}' is defined but has no value"
                   exit 1
                fi
-               __split_string_add_to_array__ "${__TEMP__}" ${OPTION_DELIMITER} ${_VALUES_}
+               __split_string_add_to_array__ "${__TEMP__}" ${OPTION_DELIMITER} ${_DEFINED_VALUES_}
                OPTION_PROCESSED=1
                break
             fi
@@ -256,9 +256,9 @@ function __test_defined_parameter__( )
          print_error "'${_DEFAULT_VALUES_}' is not defined 3"
       fi
 
-      local _VALUES_="CMD_${LOCAL_NAME_UP}_VALUES"
-      if ! declare -p ${_VALUES_} 2>/dev/null | grep -q 'declare -a'; then
-         print_error "'${_VALUES_}' is not defined 3"
+      local _DEFINED_VALUES_="CMD_${LOCAL_NAME_UP}_DEFINED_VALUES"
+      if ! declare -p ${_DEFINED_VALUES_} 2>/dev/null | grep -q 'declare -a'; then
+         print_error "'${_DEFINED_VALUES_}' is not defined 3"
       fi
    elif [ ${!_TYPE_} == ${PARAMETER_TYPE_OPTION} ]; then
       local _DEFINED_="CMD_${LOCAL_NAME_UP}_DEFINED"
@@ -289,7 +289,7 @@ function __define_argument__( )
    declare -g "CMD_${LOCAL_NAME_UP}_REQUIRED=${LOCAL_REQUIRED}"
    declare -ag "CMD_${LOCAL_NAME_UP}_ALLOWED_VALUES=(\"\${LOCAL_PARAMETER_VALUES_ALLOWED[@]}\")"
    declare -ag "CMD_${LOCAL_NAME_UP}_DEFAULT_VALUES=(\"\${LOCAL_PARAMETER_VALUES_DEFAULT[@]}\")"
-   declare -ag "CMD_${LOCAL_NAME_UP}_VALUES=( )"
+   declare -ag "CMD_${LOCAL_NAME_UP}_DEFINED_VALUES=( )"
 }
 
 function __define_option__( )
