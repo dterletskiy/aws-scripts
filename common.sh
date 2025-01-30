@@ -21,12 +21,7 @@ readonly DELIMITER="------------------------------------------------------------
 
 
 readonly SHELL_FW=${COMMON_SCRIPT_DIR}/submodules/dterletskiy/shell_fw/
-source ${SHELL_FW}/constants/console.sh
-source ${SHELL_FW}/constants/constants.sh
-source ${SHELL_FW}/base.sh
-source ${SHELL_FW}/print.sh
-source ${SHELL_FW}/ui.sh
-source ${SHELL_FW}/drive.sh
+source ${SHELL_FW}/global.sh
 
 
 
@@ -53,22 +48,4 @@ function dump_dir( )
 function backup_dir( )
 {
    echo "$(root_dir)/backup/"
-}
-
-function compile_dt( )
-{
-   local IN_DTS=${1}
-   local OUT_DTB=${2}
-
-   local COMMAND="dtc -I dts -O dtb -o ${OUT_DTB} ${IN_DTS}"
-   execute "${COMMAND}"
-}
-
-function decompile_dt( )
-{
-   local IN_DTB=${1}
-   local OUT_DTS=${2}
-
-   local COMMAND="dtc -I dtb -O dts -o ${OUT_DTS} ${IN_DTB}"
-   execute "${COMMAND}"
 }
