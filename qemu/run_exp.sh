@@ -6,10 +6,6 @@ source ${SCRIPT_DIR}/../_backup/main.sh
 
 
 
-clear
-
-
-
 define_required_argument "boot" "uboot efi xen kernel" ""
 define_optional_argument "ram" "" "8G"
 define_optional_argument "kvm" "on off" "off"
