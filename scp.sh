@@ -1,6 +1,6 @@
 KEY="/home/dmytro_terletskyi/.tda/aws/epam/c8g.metal-24xl-2024.11.19.pem"
 REMOTE_USER=ubuntu
-REMOTE_IP=35.87.227.135
+REMOTE_IP=34.222.193.52
 REMOTE=${REMOTE_USER}@${REMOTE_IP}
 REMOTE_DIR="/home/ubuntu/workspace/yocto/"
 REMOTE_PATH=${REMOTE}:${REMOTE_DIR}
@@ -18,7 +18,7 @@ FILE=qemu-image-minimal-generic-armv8-xt.rootfs.ext4
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/rootfs.domd.ext4
 FILE=xen-generic-armv8-xt
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
-FILE=xen-generic-armv8-xt.uImage
+FILE=xen-generic-armv8-xt.efi
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 FILE=xen-generic-armv8-xt-syms
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
@@ -28,6 +28,18 @@ scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
 cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/
 FILE=full.img
 scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
+
+
+
+
+
+cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/yocto/build-dom0/tmp/work/aarch64-poky-linux/stress-ng/0.17.05/image/usr/bin/
+FILE=stress-ng
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
+cd /mnt/dev/docker/builder/epam/meta-xt-prod-qemu/build/yocto/build-dom0/tmp/work/aarch64-poky-linux/sysbench/1.0.20/image/usr/bin/
+FILE=sysbench
+scp -i ${KEY} -r ${FILE} ${REMOTE_PATH}/${FILE}
+
 
 
 

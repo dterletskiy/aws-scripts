@@ -25,6 +25,10 @@ source ${SHELL_FW}/drive.sh
 
 
 
+readonly DELIMITER="---------------------------------------------------------------------------------------------------"
+
+
+
 function root_dir( )
 {
    echo "/home/ubuntu/workspace/"
