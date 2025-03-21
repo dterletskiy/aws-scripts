@@ -5,12 +5,27 @@ source ${SCRIPT_DIR}/common.sh
 
 
 
-define_required_argument "boot" "uboot efi xen kernel" ""
-define_optional_argument "ram" "" "8G"
-define_optional_argument "kvm" "on off" "off"
-define_optional_argument "armve" "on off" "off"
-define_optional_argument "smp" "" "4"
-define_optional_argument "sme" "on off none" "none"
+define_required_argument "boot" \
+   --allowed="uboot efi xen kernel"
+
+define_optional_argument "ram" \
+   --default="8G"
+
+define_optional_argument "kvm" \
+   --allowed="on off" \
+   --default="off"
+
+define_optional_argument "armve" \
+   --allowed="on off" \
+   --default="off"
+
+define_optional_argument "smp" \
+   --default="4"
+
+define_optional_argument "sme" \
+   --allowed="on off none" \
+   --default="none"
+
 define_option "debug"
 
 
@@ -68,13 +83,12 @@ function build_params_machine( )
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
 
-   if [ "${CMD_ARMVE_DEFINED_VALUES[0]}" == "on" ]; then
-      Q_MACHINE+=",virtualization=on"
-   elif [ "${CMD_ARMVE_DEFINED_VALUES[0]}" == "off" ]; then
-      Q_MACHINE+=",virtualization=off"
+   local ARMVE_VALUE=$( get_parameter_value "sme" )
+   if [ "${ARMVE_VALUE}" != "none" ]; then
+      Q_MACHINE+=",virtualization=${ARMVE_VALUE}"
    fi
 
-   if [ "${CMD_KVM_DEFINED_VALUES[0]}" == "on" ]; then
+   if [ $( get_parameter_value "kvm" ) == "on" ]; then
       Q_MACHINE+=",accel=kvm"
    fi
 
@@ -85,26 +99,28 @@ function build_params_cpu( )
 {
    Q_CPU=" -cpu max"
 
-   if [ "${CMD_SME_DEFINED_VALUES[0]}" == "on" ]; then
-      Q_CPU+=",sme=on"
-   elif [ "${CMD_SME_DEFINED_VALUES[0]}" == "off" ]; then
-      Q_CPU+=",sme=off"
+   local SME_VALUE=$( get_parameter_value "sme" )
+   if [ "${SME_VALUE}" != "none" ]; then
+      Q_MACHINE+=",sme=${SME_VALUE}"
    fi
 
-   if [[ 0 -eq ${#CMD_SMP_DEFINED_VALUES[@]} ]]; then
-      Q_CPU+=" -smp ${CMD_SMP_DEFAULT_VALUES[0]}"
-   else
-      Q_CPU+=" -smp ${CMD_SMP_DEFINED_VALUES[0]}"
-   fi
+   Q_CPU+=$( get_parameter_value "smp" )
 
    echo "${Q_CPU}"
+}
+
+function build_params_ram( )
+{
+   Q_MEMORY=$( get_parameter_value "ram" )
+
+   echo "${Q_MEMORY}"
 }
 
 function build_params_boot( )
 {
    Q_BOOT=""
 
-   local _BOOT_=${CMD_BOOT_DEFINED_VALUES[0]}
+   local _BOOT_=$( get_parameter_value "boot" )
    case ${_BOOT_} in
       uboot)
          Q_BIOS=" -bios ${UBOOT}"
@@ -207,13 +223,17 @@ function main( )
 {
    parse_arguments "$@"
 
-
    COMMAND="sudo LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${QEMU_ARM64}"
    COMMAND="LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${QEMU_ARM64}"
    COMMAND+=$( build_params_machine )
    COMMAND+=$( build_params_cpu )
+   COMMAND+=$( build_params_ram )
    COMMAND+=$( build_params_boot )
    COMMAND+=$( build_params_common )
+
+   execute "${COMMAND} -machine dumpdtb=${QEMU_DTB_DUMP}"
+   decompile_dt ${QEMU_DTB_DUMP} ${QEMU_DTS_DUMP}
+   compile_dt ${QEMU_DTS_DUMP} ${QEMU_DTB_DUMP_RECOMPILE}
 
    execute "${COMMAND}"
    print_ok "RESULT: ${?}"
