@@ -75,7 +75,7 @@ FULL_IMAGE=$(yocto_dir)/full.img
 
 function build_params_machine( )
 {
-   Q_MACHINE=" -machine virt"
+   local Q_MACHINE=" -machine virt"
    Q_MACHINE+=",acpi=off"
    Q_MACHINE+=",secure=off"
    # Q_MACHINE+=",mte=on"
@@ -97,28 +97,33 @@ function build_params_machine( )
 
 function build_params_cpu( )
 {
-   Q_CPU=" -cpu max"
+   local Q_CPU=" -cpu max"
 
    local SME_VALUE=$( get_parameter_value "sme" )
    if [ "${SME_VALUE}" != "none" ]; then
-      Q_MACHINE+=",sme=${SME_VALUE}"
+      Q_CPU+=",sme=${SME_VALUE}"
    fi
-
-   Q_CPU+=$( get_parameter_value "smp" )
 
    echo "${Q_CPU}"
 }
 
+function build_params_smp( )
+{
+   local Q_SMP=" -smp $( get_parameter_value "smp" )"
+
+   echo "${Q_SMP}"
+}
+
 function build_params_ram( )
 {
-   Q_MEMORY=$( get_parameter_value "ram" )
+   local Q_MEMORY=" -m $( get_parameter_value "ram" )"
 
    echo "${Q_MEMORY}"
 }
 
 function build_params_boot( )
 {
-   Q_BOOT=""
+   local Q_BOOT=""
 
    local _BOOT_=$( get_parameter_value "boot" )
    case ${_BOOT_} in
@@ -227,6 +232,7 @@ function main( )
    COMMAND="LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${QEMU_ARM64}"
    COMMAND+=$( build_params_machine )
    COMMAND+=$( build_params_cpu )
+   COMMAND+=$( build_params_smp )
    COMMAND+=$( build_params_ram )
    COMMAND+=$( build_params_boot )
    COMMAND+=$( build_params_common )
