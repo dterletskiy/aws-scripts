@@ -45,6 +45,7 @@ DOM0_KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=hvc0 earlyprintk=x
 DOM0_INITRD=$(yocto_dir)/rootfs.dom0.cpio.gz
 
 DOMD_ROOTFS=$(yocto_dir)/rootfs.domd.ext4
+DOMU_ROOTFS=$(yocto_dir)/rootfs.domu.ext4
 
 KERNEL=$(yocto_dir)/linux-dom0
 KERNEL_CMDLINE="root=/dev/ram verbose loglevel=7 console=ttyAMA0 nokaslr"
@@ -157,7 +158,7 @@ function build_params_nv_kvm( )
    Q_DRIVE_DOMD_ROOTFS+=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
    Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd,iommu_platform=true"
 
-   Q_DRIVE_DOMD_ROOTFS+=" -drive if=none,index=2,id=rootfs_domd_pci,file=${DOMD_ROOTFS}"
+   Q_DRIVE_DOMD_ROOTFS+=" -drive if=none,index=2,id=rootfs_domd_pci,file=${DOMU_ROOTFS}"
    Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-pci,drive=rootfs_domd_pci,iommu_platform=true,disable-legacy=on"
 
    # Q_DRIVE_DOMD_ROOTFS+=" -device virtio-iommu-pci"
