@@ -152,9 +152,9 @@ function build_params_nv_kvm( )
    # Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
    # Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
 
-   # Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
-   # Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-pci,drive=rootfs_domd,iommu_platform=true,disable-legacy=on"
-   # # Q_DRIVE_DOMD_ROOTFS+=" -device virtio-iommu-pci"
+   Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
+   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-pci,drive=rootfs_domd,iommu_platform=true,disable-legacy=on"
+   # Q_DRIVE_DOMD_ROOTFS+=" -device virtio-iommu-pci"
 
    Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
    Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd,iommu_platform=true"
