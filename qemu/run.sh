@@ -149,8 +149,12 @@ function build_params_nv_kvm( )
       -device guest-loader,addr=0x52000000,initrd=${DOM0_INITRD} \
    "
 
+   # Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
+   # Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
+
    Q_DRIVE_DOMD_ROOTFS=" -drive if=none,index=1,id=rootfs_domd,file=${DOMD_ROOTFS}"
-   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd"
+   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-blk-device,drive=rootfs_domd,iommu_platform=true,disable-legacy=on"
+   Q_DRIVE_DOMD_ROOTFS+=" -device virtio-iommu-device"
 
    COMMAND=""
    COMMAND+=" ${Q_MACHINE}"
@@ -322,7 +326,6 @@ LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/"
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/x86_64-linux-gnu/"
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/aarch64-linux-gnu/"
 print_info "LD_LIBRARY_PATH = '${LD_LIBRARY_PATH}'"
-echo "LD_LIBRARY_PATH = '${LD_LIBRARY_PATH}'"
 COMMAND="export LD_LIBRARY_PATH"
 execute "${COMMAND}"
 
