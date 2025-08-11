@@ -128,7 +128,7 @@ function build_params_nv_kvm( )
    # Q_MACHINE+=",mte=on"
    Q_MACHINE+=",accel=kvm"
    Q_MACHINE+=",virtualization=on"
-   Q_MACHINE+=",iommu=smmuv3"
+   # Q_MACHINE+=",iommu=smmuv3"
    Q_MACHINE+=",gic-version=max"
    # Q_MACHINE+=",its=off"
 
