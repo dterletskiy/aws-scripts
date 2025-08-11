@@ -320,6 +320,7 @@ function build_params_common( )
 
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/"
 LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/x86_64-linux-gnu/"
+LD_LIBRARY_PATH+=":${QEMU_DIR}/lib/aarch64-linux-gnu/"
 COMMAND="export LD_LIBRARY_PATH"
 execute "${COMMAND}"
 
